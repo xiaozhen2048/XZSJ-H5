@@ -133,6 +133,7 @@
 
     API.activate(rawCode)
       .then(function (data) {
+        sessionStorage.removeItem('xzst_preview');
         Auth.saveActivation({
           code: rawCode,
           token: data.token,

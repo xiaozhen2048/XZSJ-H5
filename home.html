@@ -164,19 +164,19 @@
   // -----------------------------------------------------------------------
   // Render subject cards
   // -----------------------------------------------------------------------
-  function renderCards(courses) {
+  function renderCards(categories) {
     subjectGrid.style.display = '';
     subjectGrid.innerHTML = '';
 
-    for (var i = 0; i < courses.length; i++) {
-      var course = courses[i];
+    for (var i = 0; i < categories.length; i++) {
+      var cat = categories[i];
 
       // Normalize fields
-      var courseId   = course.id || course._id || '';
-      var title      = course.name || course.title || '未命名';
-      var desc       = course.description || course.desc || '';
-      var count      = course.count || course.courseCount || 0;
-      var color      = course.color || getPaletteColor(i);
+      var courseId   = cat.id || cat._id || '';
+      var title      = cat.name || cat.title || '未命名';
+      var desc       = cat.description || cat.desc || '';
+      var count      = (cat.courses || []).length || 0;
+      var color      = cat.color || getPaletteColor(i);
       var iconName   = getCategoryIcon(title);
 
       // Build description text
@@ -220,16 +220,16 @@
     API.getCourses()
       .then(function (data) {
         // The API may return an array directly or wrap in an object
-        var courses = Array.isArray(data) ? data : (data && data.courses ? data.courses : []);
+        var categories = data && data.categories ? data.categories : [];
 
         hideSkeleton();
 
-        if (courses.length === 0) {
+        if (categories.length === 0) {
           showEmpty();
           return;
         }
 
-        renderCards(courses);
+        renderCards(categories);
       })
       .catch(function (err) {
         hideSkeleton();

@@ -2,9 +2,15 @@
   "codes": {
     "XZST-7462-36DE": {
       "code": "XZST-7462-36DE",
-      "activated": false,
+      "activated": true,
       "banned": false,
-      "createdAt": "2026-06-03T07:34:00.184Z"
+      "createdAt": "2026-06-03T07:34:00.184Z",
+      "activatedAt": "2026-06-03T07:36:45.435Z",
+      "fingerprint": "::1",
+      "ips": [
+        "::1"
+      ],
+      "token": "a000802442c9c089fd20060108e2d6d76e967530997baff6bf66c050ba79802e"
     }
   },
   "adminPassword": "admin123",
