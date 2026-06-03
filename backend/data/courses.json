@@ -5,12 +5,47 @@
       "name": "数量关系",
       "color": "#C5B9CD",
       "courses": [
-        {"id": "sl-01", "title": "数推-理论+实操（数1）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/Km9gJwnz60", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/N1bQzrxGd5", "password": "1234"}]},
-        {"id": "sl-02", "title": "和差倍-理论+母题（数2）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/l7qJn9d9b2", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/KmDevxLbbb", "password": "1234"}]},
-        {"id": "sl-03", "title": "工程问题-理论+母题+实操（数4）", "tag": "必学", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/l67zVbDo13", "password": "1234"}]},
-        {"id": "sl-04", "title": "几何问题", "tag": "选修", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/NQvXbaZl32", "password": "1234"}]},
-        {"id": "sl-05", "title": "行程问题", "tag": "选修", "videos": [{"label": "录制文件1", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnde1nyout9it1fmb2iz22", "password": ""}, {"label": "录制文件2", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcndfgcb95x3db9v3ixlb75", "password": ""}]},
-        {"id": "sl-06", "title": "最后冲刺补充25题（数7）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/2qYmygd529", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/2MGZPVbM2d", "password": "1234"}, {"label": "录制文件3", "url": "https://meeting.tencent.com/crm/29eAzQgw0c", "password": "1234"}]}
+        {"id": "sl-01", "title": "数推-理论+实操（数1）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/Km9gJwnz60", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/N1bQzrxGd5", "password": "1234"}
+        ]},
+        {"id": "sl-02", "title": "和差倍-理论+母题（数2）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/l7qJn9d9b2", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/KmDevxLbbb", "password": "1234"}
+        ]},
+        {"id": "sl-03", "title": "工程问题-理论+母题+实操（数4）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/l67zVbDo13", "password": "1234"}
+        ]},
+        {"id": "sl-04", "title": "经济问题", "tag": "选修", "videos": [
+          {"label": "录制文件", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnkxfzx8v84n9pkhdfp9f8", "password": ""}
+        ]},
+        {"id": "sl-05", "title": "周期问题", "tag": "选修", "videos": [
+          {"label": "录制文件1", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnq4sf5y3325746f97gzvo", "password": ""},
+          {"label": "录制文件2", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnq5g4b18ymj19f51xbmwo", "password": ""}
+        ]},
+        {"id": "sl-06", "title": "排列组合", "tag": "选修", "videos": [
+          {"label": "录制文件1", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnf51ej29gh9z8186u6dq3", "password": ""},
+          {"label": "录制文件2", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnf6wxc4x3bjd35dg9e4ps", "password": ""}
+        ]},
+        {"id": "sl-07", "title": "几何问题", "tag": "选修", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/NQvXbaZl32", "password": "1234"}
+        ]},
+        {"id": "sl-08", "title": "行程问题", "tag": "选修", "videos": [
+          {"label": "录制文件1", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcnde1nyout9it1fmb2iz22", "password": ""},
+          {"label": "录制文件2", "url": "https://e84vwmvy3o.feishu.cn/minutes/obcndfgcb95x3db9v3ixlb75", "password": ""}
+        ]},
+        {"id": "sl-09", "title": "最后冲刺补充25题（数7）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/2qYmygd529", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/2MGZPVbM2d", "password": "1234"},
+          {"label": "录制文件3", "url": "https://meeting.tencent.com/crm/29eAzQgw0c", "password": "1234"}
+        ]},
+        {"id": "sl-10", "title": "数量应用题专辑（数6）（非必要）", "tag": "选修", "videos": [
+          {"label": "第一章 1.1预备知识", "url": "https://meeting.tencent.com/crm/KeQ8JL3K07", "password": "1234"},
+          {"label": "第一章 1.2应用题解题预备知识", "url": "https://meeting.tencent.com/crm/KP4aAyrK32", "password": "1234"},
+          {"label": "第一章 1.3鸡兔同笼思想", "url": "https://meeting.tencent.com/crm/l5Edy7Zl1c", "password": "1234"},
+          {"label": "第一章 1.4比例思维", "url": "https://meeting.tencent.com/crm/KPvQRW9Nb2", "password": "1234"},
+          {"label": "第一章 1.5盈亏问题", "url": "https://meeting.tencent.com/crm/KPvQRW9Nb2", "password": "1234"}
+        ]}
       ]
     },
     {
@@ -18,10 +53,33 @@
       "name": "资料分析",
       "color": "#D4C5C7",
       "courses": [
-        {"id": "zl-01", "title": "资料考点-理论+母题（资1）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/KzB0xARr61", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/NLXPVpbBfb", "password": "1234"}]},
-        {"id": "zl-02", "title": "资料考点-实操（资4）", "tag": "必学", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/N8JvdpzK33", "password": "1234"}]},
-        {"id": "zl-03", "title": "资料速算-理论+母题（资2）", "tag": "必学", "videos": [{"label": "百化分-理论", "url": "https://meeting.tencent.com/crm/24bVYZwl20", "password": "1234"}, {"label": "百化分-练习题", "url": "https://meeting.tencent.com/crm/KewjGBpNaf", "password": "1234"}, {"label": "化除为乘-理论", "url": "https://meeting.tencent.com/crm/NQ8DQmj284", "password": "1234"}]},
-        {"id": "zl-04", "title": "套题1（资5）", "tag": "必学", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/2ZnZkQgwt", "password": "1234"}]}
+        {"id": "zl-01", "title": "资料考点-理论+母题（资1）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/KzB0xARr61", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/NLXPVpbBfb", "password": "1234"}
+        ]},
+        {"id": "zl-02", "title": "资料考点-实操（资4）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/N8JvdpzK33", "password": "1234"}
+        ]},
+        {"id": "zl-03", "title": "资料速算-理论+母题（资2）", "tag": "必学", "videos": [
+          {"label": "百化分-理论", "url": "https://meeting.tencent.com/crm/24bVYZwl20", "password": "1234"},
+          {"label": "百化分-练习题", "url": "https://meeting.tencent.com/crm/KewjGBpNaf", "password": "1234"},
+          {"label": "化除为乘-理论", "url": "https://meeting.tencent.com/crm/NQ8DQmj284", "password": "1234"}
+        ]},
+        {"id": "zl-04", "title": "套题1（资5）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/2ZnZkQgwt", "password": "1234"}
+        ]},
+        {"id": "zl-05", "title": "套题2（资6）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/2BB15xw4de", "password": "1234"}
+        ]},
+        {"id": "zl-06", "title": "套题4（资8）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/NAgdjkzRdb", "password": "1234"}
+        ]},
+        {"id": "zl-07", "title": "套题5（资8）", "tag": "选修", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/NQYpoaPWa7", "password": "1234"}
+        ]},
+        {"id": "zl-08", "title": "套题6（资8）", "tag": "选修", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/lJW8qkgPac", "password": "1234"}
+        ]}
       ]
     },
     {
@@ -29,12 +87,41 @@
       "name": "判断推理",
       "color": "#B8B0C8",
       "courses": [
-        {"id": "pd-01", "title": "平面拼合-理论+实操（判2）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/No9x3Okba7", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/Km9OR1AM74", "password": "1234"}]},
-        {"id": "pd-02", "title": "加强削弱-理论+母题（判3）", "tag": "必学", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/2rYzGdRbfc", "password": "1234"}]},
-        {"id": "pd-03", "title": "图形推理-理论+实操（判4）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/KnO4A1nwa2", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/NXP0mQjra3", "password": "1234"}]},
-        {"id": "pd-04", "title": "空间折叠-理论+实操（判5）", "tag": "必学", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/lvW9gMED0d", "password": "1234"}]},
-        {"id": "pd-05", "title": "类比推理-理论+实操（判6）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/NXnR8koEf3", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/KDJbXLEa82", "password": "1234"}]},
-        {"id": "pd-06", "title": "定义判断-理论+实操（判7）", "tag": "必学", "videos": [{"label": "录制文件1", "url": "https://meeting.tencent.com/crm/2rYXGDMw6f", "password": "1234"}, {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/N1b6Rjqrc1", "password": "1234"}]}
+        {"id": "pd-01", "title": "平面拼合-理论+实操（判2）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/No9x3Okba7", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/Km9OR1AM74", "password": "1234"}
+        ]},
+        {"id": "pd-02", "title": "加强削弱-理论+母题（判3）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/2rYzGdRbfc", "password": "1234"}
+        ]},
+        {"id": "pd-03", "title": "图形推理-理论+实操（判4）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/KnO4A1nwa2", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/NXP0mQjra3", "password": "1234"}
+        ]},
+        {"id": "pd-04", "title": "空间折叠-理论+实操（判5）", "tag": "必学", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/lvW9gMED0d", "password": "1234"}
+        ]},
+        {"id": "pd-05", "title": "类比推理-理论+实操（判6）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/NXnR8koEf3", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/KDJbXLEa82", "password": "1234"}
+        ]},
+        {"id": "pd-06", "title": "定义判断-理论+实操（判7）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/2rYXGDMw6f", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/N1b6Rjqrc1", "password": "1234"}
+        ]},
+        {"id": "pd-07", "title": "论证逻辑刷题（判3）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/lJWk8ed087", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/l67nD9nQ4e", "password": "1234"}
+        ]},
+        {"id": "pd-08", "title": "类比图推定义联合刷题1（判9）", "tag": "选修", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/2Ozev9ek8c", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/23vDkBrqb5", "password": "1234"},
+          {"label": "录制文件3", "url": "https://meeting.tencent.com/crm/l5EYPAzgf3", "password": "1234"}
+        ]},
+        {"id": "pd-09", "title": "推理题补充刷题（判8）", "tag": "必学", "videos": [
+          {"label": "录制文件1", "url": "https://meeting.tencent.com/crm/2ZnWajgp11", "password": "1234"},
+          {"label": "录制文件2", "url": "https://meeting.tencent.com/crm/NLnJGqQ7ff", "password": "1234"}
+        ]}
       ]
     },
     {
@@ -42,11 +129,46 @@
       "name": "答疑回放",
       "color": "#C9B8A8",
       "courses": [
-        {"id": "dy-01", "title": "第一次答疑（数量核心考点再强化梳理）", "tag": "", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/Nx9B10W9a", "password": ""}]},
-        {"id": "dy-02", "title": "第五次答疑（资料、判断）", "tag": "", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/23boPALb7b", "password": "1234"}]},
-        {"id": "dy-03", "title": "第六次答疑（13条题目解答）", "tag": "", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/l7wQYkR97e", "password": "1234"}]},
-        {"id": "dy-04", "title": "第七次答疑（10来个题目）", "tag": "", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/KzqOPwYX03", "password": "1234"}]},
-        {"id": "dy-05", "title": "第八场（考前规划）", "tag": "", "videos": [{"label": "录制文件", "url": "https://meeting.tencent.com/crm/l7wx3LGE8f", "password": "1234"}]}
+        {"id": "dy-01", "title": "第一次答疑（数量核心考点再强化梳理）", "tag": "", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/Nx9B10W9a", "password": ""}
+        ]},
+        {"id": "dy-02", "title": "第五次答疑（资料、判断）", "tag": "", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/23boPALb7b", "password": "1234"}
+        ]},
+        {"id": "dy-03", "title": "第六次答疑（13条题目解答）", "tag": "", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/l7wQYkR97e", "password": "1234"}
+        ]},
+        {"id": "dy-04", "title": "第七次答疑（10来个题目）", "tag": "", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/KzqOPwYX03", "password": "1234"}
+        ]},
+        {"id": "dy-05", "title": "第八场（考前规划）", "tag": "", "videos": [
+          {"label": "录制文件", "url": "https://meeting.tencent.com/crm/l7wx3LGE8f", "password": "1234"}
+        ]}
+      ]
+    },
+    {
+      "id": "zhenti",
+      "name": "江苏真题复盘",
+      "color": "#C4A882",
+      "courses": [
+        {"id": "zt-sl", "title": "数量-真题复盘（2026-2020年）", "tag": "必学", "videos": [
+          {"label": "2025年 数量", "url": "https://meeting.tencent.com/crm/2GLgDBb1c7", "password": "1234"},
+          {"label": "2024年 数量", "url": "https://meeting.tencent.com/crm/2GLgDBb1c7", "password": "1234"},
+          {"label": "2023年 数量", "url": "https://meeting.tencent.com/crm/NQnwee7yc5", "password": "1234"},
+          {"label": "2022年 数量", "url": "https://meeting.tencent.com/crm/NAOMAE6rc5", "password": "1234"}
+        ]},
+        {"id": "zt-zl", "title": "资料-真题复盘（2026-2020年）", "tag": "必学", "videos": [
+          {"label": "2025年 资料", "url": "https://meeting.tencent.com/crm/2ZG58gMd45", "password": "1234"},
+          {"label": "2024年 资料", "url": "https://meeting.tencent.com/crm/2ZG58gMd45", "password": "1234"},
+          {"label": "2023年 资料", "url": "https://meeting.tencent.com/crm/2Oz34zm38c", "password": "1234"},
+          {"label": "2022年 资料", "url": "https://meeting.tencent.com/crm/NQn1P3ZJ21", "password": "1234"}
+        ]},
+        {"id": "zt-pd", "title": "判断-真题复盘（2026-2020年）", "tag": "必学", "videos": [
+          {"label": "2025年 判断", "url": "https://meeting.tencent.com/crm/2qYB3aEm4d", "password": "1234"},
+          {"label": "2024年 判断", "url": "https://meeting.tencent.com/crm/2qYB3aEm4d", "password": "1234"},
+          {"label": "2023年 判断", "url": "https://meeting.tencent.com/crm/2qYB3aEm4d", "password": "1234"},
+          {"label": "2022年 判断", "url": "https://meeting.tencent.com/crm/l5EJ1PgV50", "password": "1234"}
+        ]}
       ]
     }
   ],
