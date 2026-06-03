@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>小镇刷题家 — 后台管理</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ==========================================================================
+     Login Gate (shown when no admin token)
+     ========================================================================== -->
+<div id="loginGate" style="display:none;">
+  <div class="lock-screen">
+    <div class="logo-area">
+      <div class="logo-icon">
+        <svg width="40" height="40" style="fill:#FFFFFF;">
+          <use href="assets/icons.svg#icon-lock"/>
+        </svg>
+      </div>
+      <h1>后台管理</h1>
+      <p>请输入管理密码进入后台</p>
+    </div>
+
+    <div style="width:100%;max-width:100%">
+      <div class="form-group">
+        <input
+          type="password"
+          id="passwordInput"
+          class="form-input"
+          placeholder="输入管理密码"
+          autocomplete="off"
+          style="text-align:center"
+        >
+      </div>
+
+      <button class="btn btn-primary btn-block" id="loginBtn">登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Admin Panel (shown when admin token exists)
+     ========================================================================== -->
+<div id="adminPanel" style="display:none;">
+
+  <!-- Sticky Page Header -->
+  <div class="page-header">
+    <h1 class="title">后台管理</h1>
+    <button class="btn btn-outline btn-sm" id="logoutBtn">退出</button>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+
+    <!-- ===================================================================
+         Section 1: 课程管理
+         =================================================================== -->
+    <div class="admin-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-lg);">
+        <h2 style="margin-bottom:0;">课程管理</h2>
+        <button class="btn btn-primary btn-sm" id="addCourseBtn">
+          <svg width="16" height="16"><use href="assets/icons.svg#icon-plus"/></svg>
+          添加课程
+        </button>
+      </div>
+
+      <!-- Course loading skeleton -->
+      <div id="courseSkeleton">
+        <div class="skeleton skeleton-card" style="margin-bottom:var(--space-md);"></div>
+        <div class="skeleton skeleton-card" style="margin-bottom:var(--space-md);"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
+
+      <!-- Course list container -->
+      <div id="courseList" style="display:none;"></div>
+
+      <!-- Course error state -->
+      <div id="courseError" style="display:none;text-align:center;padding:var(--space-2xl);">
+        <p id="courseErrorMsg" style="color:var(--color-text-secondary);margin-bottom:var(--space-lg);"></p>
+        <button class="btn btn-outline btn-sm" id="courseRetryBtn">重试</button>
+      </div>
+
+      <!-- Course empty state -->
+      <div id="courseEmpty" style="display:none;text-align:center;padding:var(--space-2xl);">
+        <p style="color:var(--color-text-muted);">暂无课程，点击上方按钮添加</p>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         Section 2: 激活码管理
+         =================================================================== -->
+    <div class="admin-section">
+      <h2>激活码管理</h2>
+
+      <!-- Generate codes -->
+      <div style="display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-lg);">
+        <input
+          type="number"
+          id="codeCount"
+          class="form-input"
+          value="10"
+          min="1"
+          max="100"
+          style="width:80px;text-align:center;"
+        >
+        <button class="btn btn-primary btn-sm" id="generateBtn">生成激活码</button>
+      </div>
+
+      <!-- Generated codes result -->
+      <div id="generatedCodes" style="display:none;margin-bottom:var(--space-lg);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-sm);">
+          <span style="font-size:var(--font-size-sm);font-weight:var(--font-weight-medium);">新生成的激活码</span>
+          <button class="btn btn-outline btn-sm" id="copyAllBtn">
+            <svg width="14" height="14"><use href="assets/icons.svg#icon-copy"/></svg>
+            复制全部
+          </button>
+        </div>
+        <div id="generatedCodeList" style="background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-md);font-family:monospace;font-size:var(--font-size-sm);line-height:1.8;word-break:break-all;"></div>
+      </div>
+
+      <!-- Codes table -->
+      <div id="codeTableWrapper" style="overflow-x:auto;">
+        <table class="admin-table" id="codeTable">
+          <thead>
+            <tr>
+              <th>激活码</th>
+              <th>状态</th>
+              <th>封禁</th>
+              <th>激活时间</th>
+              <th>IP信息</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="codeTableBody">
+            <tr>
+              <td colspan="6" style="text-align:center;padding:var(--space-xl);color:var(--color-text-muted);">加载中...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Codes error state -->
+      <div id="codeError" style="display:none;text-align:center;padding:var(--space-2xl);">
+        <p id="codeErrorMsg" style="color:var(--color-text-secondary);margin-bottom:var(--space-lg);"></p>
+        <button class="btn btn-outline btn-sm" id="codeRetryBtn">重试</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Course Add/Edit Modal (Bottom Sheet)
+     ========================================================================== -->
+<div id="courseModal" class="modal-overlay" style="display:none;">
+  <div class="modal-sheet">
+    <h3 id="modalTitle">添加课程</h3>
+
+    <div class="form-group">
+      <label>分类</label>
+      <select id="modalCategory" class="form-input"></select>
+    </div>
+
+    <div class="form-group">
+      <label>课程标题</label>
+      <input type="text" id="modalCourseTitle" class="form-input" placeholder="输入课程标题">
+    </div>
+
+    <div class="form-group">
+      <label>标签</label>
+      <select id="modalTag" class="form-input">
+        <option value="">无</option>
+        <option value="必学">必学</option>
+        <option value="选修">选修</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>视频列表</label>
+      <textarea id="modalVideos" class="form-input" rows="5" placeholder="录制文件1|https://meeting.tencent.com/crm/xxx|1234"></textarea>
+      <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);margin-top:var(--space-sm);">
+        每行一个视频，格式：名称|链接|密码
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-block" id="modalCancel">取消</button>
+      <button class="btn btn-primary btn-block" id="modalSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Scripts
+     ========================================================================== -->
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  // -----------------------------------------------------------------------
+  // Escape HTML special characters to prevent XSS
+  // -----------------------------------------------------------------------
+  function escapeHTML(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // -----------------------------------------------------------------------
+  // State
+  // -----------------------------------------------------------------------
+  var adminToken = sessionStorage.getItem('xzst_admin_token') || '';
+  var editingCourseId = null;
+  var allCourses = [];
+  var allCodes = [];
+
+  // -----------------------------------------------------------------------
+  // Initialize: show login gate or admin panel
+  // -----------------------------------------------------------------------
+  function init() {
+    if (adminToken) {
+      showAdminPanel();
+    } else {
+      showLoginGate();
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Login Gate
+  // -----------------------------------------------------------------------
+  var loginGate = document.getElementById('loginGate');
+  var adminPanel = document.getElementById('adminPanel');
+  var passwordInput = document.getElementById('passwordInput');
+  var loginBtn = document.getElementById('loginBtn');
+
+  function showLoginGate() {
+    loginGate.style.display = '';
+    adminPanel.style.display = 'none';
+  }
+
+  function showAdminPanel() {
+    loginGate.style.display = 'none';
+    adminPanel.style.display = '';
+    loadCourses();
+    loadCodes();
+  }
+
+  function doLogin() {
+    var password = passwordInput.value.trim();
+    if (!password) {
+      App.toast('请输入管理密码');
+      return;
+    }
+
+    loginBtn.textContent = '登录中...';
+    loginBtn.disabled = true;
+    passwordInput.disabled = true;
+
+    API.adminLogin(password)
+      .then(function (data) {
+        var token = data.token || '';
+        if (!token) {
+          throw new Error('登录失败，未获取到令牌');
+        }
+        // Save token for gate check
+        sessionStorage.setItem('xzst_admin_token', token);
+        // Also save via Auth so API.request() can pick it up
+        Auth.saveActivation({
+          code: 'admin',
+          token: token,
+          activatedAt: new Date().toISOString()
+        });
+        adminToken = token;
+        App.toast('登录成功');
+        showAdminPanel();
+      })
+      .catch(function (err) {
+        App.toast(err.message || '登录失败');
+        loginBtn.textContent = '登录';
+        loginBtn.disabled = false;
+        passwordInput.disabled = false;
+        passwordInput.focus();
+      });
+  }
+
+  loginBtn.addEventListener('click', doLogin);
+
+  passwordInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      doLogin();
+    }
+  });
+
+  // -----------------------------------------------------------------------
+  // Logout
+  // -----------------------------------------------------------------------
+  var logoutBtn = document.getElementById('logoutBtn');
+
+  logoutBtn.addEventListener('click', function () {
+    sessionStorage.removeItem('xzst_admin_token');
+    // Clear auth data so API.request() no longer sends admin token
+    localStorage.removeItem(window.APP_CONFIG.STORAGE_KEYS.ACTIVATION);
+    window.location.reload();
+  });
+
+  // -----------------------------------------------------------------------
+  // Course Management
+  // -----------------------------------------------------------------------
+  var courseSkeleton = document.getElementById('courseSkeleton');
+  var courseList = document.getElementById('courseList');
+  var courseError = document.getElementById('courseError');
+  var courseErrorMsg = document.getElementById('courseErrorMsg');
+  var courseEmpty = document.getElementById('courseEmpty');
+  var courseRetryBtn = document.getElementById('courseRetryBtn');
+  var addCourseBtn = document.getElementById('addCourseBtn');
+
+  function showCourseSkeleton() {
+    courseSkeleton.style.display = '';
+    courseList.style.display = 'none';
+    courseError.style.display = 'none';
+    courseEmpty.style.display = 'none';
+  }
+
+  function showCourseError(msg) {
+    courseSkeleton.style.display = 'none';
+    courseList.style.display = 'none';
+    courseError.style.display = '';
+    courseEmpty.style.display = 'none';
+    courseErrorMsg.textContent = msg || '加载失败，请检查网络连接';
+  }
+
+  function showCourseEmpty() {
+    courseSkeleton.style.display = 'none';
+    courseList.style.display = 'none';
+    courseError.style.display = 'none';
+    courseEmpty.style.display = '';
+  }
+
+  function showCourseList() {
+    courseSkeleton.style.display = 'none';
+    courseList.style.display = '';
+    courseError.style.display = 'none';
+    courseEmpty.style.display = 'none';
+  }
+
+  /*
+   * Normalize a single course object.
+   * Ensures consistent field access regardless of API response shape.
+   */
+  function normalizeCourse(c) {
+    return {
+      id: c.id || c._id || '',
+      title: c.title || c.name || '未命名课程',
+      category: c.category || c.cat || '',
+      categoryId: c.categoryId || c.catId || c.category || c.cat || '',
+      tag: c.tag || '',
+      videos: c.videos || [],
+      order: c.order || c.sort || 0
+    };
+  }
+
+  /*
+   * Group courses by category.
+   * Returns array of { category: string, courses: [] }
+   */
+  function groupCoursesByCategory(courses) {
+    var groups = {};
+    for (var i = 0; i < courses.length; i++) {
+      var course = normalizeCourse(courses[i]);
+      var cat = course.category || '未分类';
+      if (!groups[cat]) {
+        groups[cat] = [];
+      }
+      groups[cat].push(course);
+    }
+    // Convert to array, sort by category name
+    var result = [];
+    var keys = Object.keys(groups).sort();
+    for (var k = 0; k < keys.length; k++) {
+      // Sort courses within category by order
+      groups[keys[k]].sort(function (a, b) {
+        return (a.order || 0) - (b.order || 0);
+      });
+      result.push({
+        category: keys[k],
+        courses: groups[keys[k]]
+      });
+    }
+    return result;
+  }
+
+  /*
+   * Get all unique categories from loaded courses.
+   */
+  function getCategories() {
+    var cats = {};
+    for (var i = 0; i < allCourses.length; i++) {
+      var cat = allCourses[i].category || '未分类';
+      cats[cat] = true;
+    }
+    var result = Object.keys(cats).sort();
+    return result;
+  }
+
+  /*
+   * Render the course management list.
+   */
+  function renderCourseList() {
+    var grouped = groupCoursesByCategory(allCourses);
+
+    if (grouped.length === 0) {
+      showCourseEmpty();
+      return;
+    }
+
+    showCourseList();
+    courseList.innerHTML = '';
+
+    for (var g = 0; g < grouped.length; g++) {
+      var group = grouped[g];
+
+      // Category header
+      var catHeader = document.createElement('div');
+      catHeader.style.cssText = 'font-weight:var(--font-weight-semibold);font-size:var(--font-size-base);color:var(--color-text);padding:var(--space-md) 0;margin-top:var(--space-lg);border-bottom:1px solid var(--color-border);';
+      catHeader.textContent = group.category;
+      courseList.appendChild(catHeader);
+
+      // Course rows
+      for (var c = 0; c < group.courses.length; c++) {
+        var course = group.courses[c];
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-md) 0;border-bottom:1px solid var(--color-border);';
+
+        // Title and tag
+        var infoDiv = document.createElement('div');
+        infoDiv.style.cssText = 'flex:1;min-width:0;display:flex;align-items:center;gap:var(--space-sm);';
+
+        var titleSpan = document.createElement('span');
+        titleSpan.style.cssText = 'font-size:var(--font-size-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+        titleSpan.textContent = course.title;
+        infoDiv.appendChild(titleSpan);
+
+        if (course.tag) {
+          var tagSpan = document.createElement('span');
+          tagSpan.className = course.tag === '必学' ? 'tag required' : 'tag';
+          tagSpan.textContent = course.tag;
+          infoDiv.appendChild(tagSpan);
+        }
+
+        row.appendChild(infoDiv);
+
+        // Edit button
+        var editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-outline btn-sm';
+        editBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
+        editBtn.innerHTML = '<svg width="14" height="14"><use href="assets/icons.svg#icon-edit"/></svg>';
+        editBtn.title = '编辑';
+        (function (crs) {
+          editBtn.addEventListener('click', function () {
+            openEditModal(crs);
+          });
+        })(course);
+        row.appendChild(editBtn);
+
+        // Delete button
+        var deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-danger btn-sm';
+        deleteBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
+        deleteBtn.innerHTML = '<svg width="14" height="14"><use href="assets/icons.svg#icon-trash"/></svg>';
+        deleteBtn.title = '删除';
+        (function (crs) {
+          deleteBtn.addEventListener('click', function () {
+            deleteCourse(crs);
+          });
+        })(course);
+        row.appendChild(deleteBtn);
+
+        courseList.appendChild(row);
+      }
+    }
+  }
+
+  /*
+   * Load courses from API.
+   */
+  function loadCourses() {
+    showCourseSkeleton();
+
+    API.adminGetCourses()
+      .then(function (data) {
+        var courses = [];
+        // Handle different response shapes
+        if (Array.isArray(data)) {
+          courses = data;
+        } else if (data && Array.isArray(data.courses)) {
+          courses = data.courses;
+        } else if (data && Array.isArray(data.categories)) {
+          // Flatten categories into courses
+          for (var i = 0; i < data.categories.length; i++) {
+            var cat = data.categories[i];
+            var catName = cat.name || cat.title || '';
+            var catCourses = cat.courses || [];
+            for (var j = 0; j < catCourses.length; j++) {
+              var crs = catCourses[j];
+              crs.category = crs.category || catName;
+              courses.push(crs);
+            }
+          }
+        }
+
+        allCourses = courses.map(normalizeCourse);
+        renderCourseList();
+      })
+      .catch(function (err) {
+        showCourseError(err.message || '加载失败，请检查网络连接');
+      });
+  }
+
+  courseRetryBtn.addEventListener('click', function () {
+    loadCourses();
+  });
+
+  // -----------------------------------------------------------------------
+  // Delete Course
+  // -----------------------------------------------------------------------
+  function deleteCourse(course) {
+    var confirmed = confirm('确认删除课程「' + course.title + '」？此操作不可撤销。');
+    if (!confirmed) return;
+
+    API.adminDeleteCourse(course.id)
+      .then(function () {
+        App.toast('课程已删除');
+        loadCourses();
+      })
+      .catch(function (err) {
+        App.toast(err.message || '删除失败');
+      });
+  }
+
+  // -----------------------------------------------------------------------
+  // Course Modal (Add / Edit)
+  // -----------------------------------------------------------------------
+  var courseModal = document.getElementById('courseModal');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalCategory = document.getElementById('modalCategory');
+  var modalCourseTitle = document.getElementById('modalCourseTitle');
+  var modalTag = document.getElementById('modalTag');
+  var modalVideos = document.getElementById('modalVideos');
+  var modalCancel = document.getElementById('modalCancel');
+  var modalSave = document.getElementById('modalSave');
+
+  /*
+   * Populate the category dropdown with existing categories.
+   */
+  function populateCategoryDropdown(selectedCategory) {
+    var categories = getCategories();
+    modalCategory.innerHTML = '';
+    for (var i = 0; i < categories.length; i++) {
+      var option = document.createElement('option');
+      option.value = categories[i];
+      option.textContent = categories[i];
+      if (categories[i] === selectedCategory) {
+        option.selected = true;
+      }
+      modalCategory.appendChild(option);
+    }
+    // Always add an "other" option at the end (user types custom category)
+    var otherOption = document.createElement('option');
+    otherOption.value = '__new__';
+    otherOption.textContent = '+ 新建分类';
+    modalCategory.appendChild(otherOption);
+  }
+
+  /*
+   * Convert videos array to textarea string.
+   */
+  function videosToText(videos) {
+    if (!videos || videos.length === 0) return '';
+    var lines = [];
+    for (var i = 0; i < videos.length; i++) {
+      var v = videos[i];
+      var label = v.label || v.title || '';
+      var url = v.url || '';
+      var password = v.password || v.pwd || '';
+      lines.push(label + '|' + url + '|' + password);
+    }
+    return lines.join('\n');
+  }
+
+  /*
+   * Convert textarea string to videos array.
+   */
+  function textToVideos(text) {
+    if (!text || !text.trim()) return [];
+    var lines = text.trim().split('\n');
+    var videos = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+      var parts = line.split('|');
+      var label = (parts[0] || '').trim();
+      var url = (parts[1] || '').trim();
+      var password = (parts[2] || '').trim();
+      if (label || url) {
+        videos.push({
+          label: label || ('视频 ' + (videos.length + 1)),
+          url: url,
+          password: password
+        });
+      }
+    }
+    return videos;
+  }
+
+  /*
+   * Open modal for adding a new course.
+   */
+  function openAddModal() {
+    editingCourseId = null;
+    modalTitle.textContent = '添加课程';
+    modalCourseTitle.value = '';
+    modalTag.value = '';
+    modalVideos.value = '';
+    populateCategoryDropdown('');
+    courseModal.style.display = '';
+  }
+
+  /*
+   * Open modal for editing an existing course.
+   */
+  function openEditModal(course) {
+    editingCourseId = course.id;
+    modalTitle.textContent = '编辑课程';
+    modalCourseTitle.value = course.title || '';
+    modalTag.value = course.tag || '';
+    modalVideos.value = videosToText(course.videos);
+    populateCategoryDropdown(course.category || '');
+    courseModal.style.display = '';
+  }
+
+  /*
+   * Close the modal.
+   */
+  function closeModal() {
+    courseModal.style.display = 'none';
+    editingCourseId = null;
+  }
+
+  /*
+   * Save course (create or update).
+   */
+  function saveCourse() {
+    var categorySelect = modalCategory.value;
+    var category;
+    if (categorySelect === '__new__') {
+      category = prompt('请输入新分类名称：');
+      if (!category || !category.trim()) {
+        App.toast('分类名称不能为空');
+        return;
+      }
+      category = category.trim();
+    } else {
+      category = categorySelect;
+    }
+
+    if (!category) {
+      App.toast('请选择或输入分类');
+      return;
+    }
+
+    var title = modalCourseTitle.value.trim();
+    if (!title) {
+      App.toast('请输入课程标题');
+      return;
+    }
+
+    var tag = modalTag.value;
+    var videos = textToVideos(modalVideos.value);
+
+    var courseData = {
+      category: category,
+      title: title,
+      tag: tag,
+      videos: videos
+    };
+
+    if (editingCourseId) {
+      courseData.id = editingCourseId;
+    }
+
+    modalSave.textContent = '保存中...';
+    modalSave.disabled = true;
+    modalCancel.disabled = true;
+
+    API.adminSaveCourse(courseData)
+      .then(function () {
+        App.toast(editingCourseId ? '课程已更新' : '课程已创建');
+        closeModal();
+        loadCourses();
+      })
+      .catch(function (err) {
+        App.toast(err.message || '保存失败');
+        modalSave.textContent = '保存';
+        modalSave.disabled = false;
+        modalCancel.disabled = false;
+      });
+  }
+
+  addCourseBtn.addEventListener('click', openAddModal);
+  modalCancel.addEventListener('click', closeModal);
+  modalSave.addEventListener('click', saveCourse);
+
+  // Close modal on overlay click
+  courseModal.addEventListener('click', function (e) {
+    if (e.target === courseModal) {
+      closeModal();
+    }
+  });
+
+  // Handle new category selection
+  modalCategory.addEventListener('change', function () {
+    if (this.value === '__new__') {
+      // Will prompt on save
+    }
+  });
+
+  // -----------------------------------------------------------------------
+  // Activation Code Management
+  // -----------------------------------------------------------------------
+  var codeCount = document.getElementById('codeCount');
+  var generateBtn = document.getElementById('generateBtn');
+  var generatedCodes = document.getElementById('generatedCodes');
+  var generatedCodeList = document.getElementById('generatedCodeList');
+  var copyAllBtn = document.getElementById('copyAllBtn');
+  var codeTableBody = document.getElementById('codeTableBody');
+  var codeTableWrapper = document.getElementById('codeTableWrapper');
+  var codeError = document.getElementById('codeError');
+  var codeErrorMsg = document.getElementById('codeErrorMsg');
+  var codeRetryBtn = document.getElementById('codeRetryBtn');
+
+  /*
+   * Generate activation codes.
+   */
+  function generateCodes() {
+    var count = parseInt(codeCount.value, 10);
+    if (isNaN(count) || count < 1) {
+      App.toast('请输入有效的数量');
+      return;
+    }
+    if (count > 100) {
+      App.toast('单次最多生成100个激活码');
+      return;
+    }
+
+    generateBtn.textContent = '生成中...';
+    generateBtn.disabled = true;
+    codeCount.disabled = true;
+
+    API.adminGenerateCodes(count)
+      .then(function (data) {
+        var codes = data.codes || [];
+        if (codes.length === 0) {
+          App.toast('未返回激活码');
+          return;
+        }
+
+        generatedCodes.style.display = '';
+        generatedCodeList.innerHTML = '';
+        for (var i = 0; i < codes.length; i++) {
+          var codeSpan = document.createElement('span');
+          codeSpan.textContent = codes[i];
+          codeSpan.style.cssText = 'display:block;';
+          generatedCodeList.appendChild(codeSpan);
+        }
+
+        App.toast('已生成 ' + codes.length + ' 个激活码');
+        // Refresh code list
+        loadCodes();
+      })
+      .catch(function (err) {
+        App.toast(err.message || '生成失败');
+      })
+      .finally(function () {
+        generateBtn.textContent = '生成激活码';
+        generateBtn.disabled = false;
+        codeCount.disabled = false;
+      });
+  }
+
+  generateBtn.addEventListener('click', generateCodes);
+
+  /*
+   * Copy all generated codes to clipboard.
+   */
+  copyAllBtn.addEventListener('click', function () {
+    var spans = generatedCodeList.querySelectorAll('span');
+    var codes = [];
+    for (var i = 0; i < spans.length; i++) {
+      codes.push(spans[i].textContent);
+    }
+    if (codes.length > 0) {
+      App.copy(codes.join('\n'));
+    }
+  });
+
+  /*
+   * Load activation codes from API.
+   */
+  function loadCodes() {
+    codeTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:var(--space-xl);color:var(--color-text-muted);">加载中...</td></tr>';
+    codeError.style.display = 'none';
+    codeTableWrapper.style.display = '';
+
+    API.adminListCodes()
+      .then(function (data) {
+        var codes = [];
+        if (Array.isArray(data)) {
+          codes = data;
+        } else if (data && Array.isArray(data.codes)) {
+          codes = data.codes;
+        }
+
+        allCodes = codes;
+        renderCodeTable(codes);
+      })
+      .catch(function (err) {
+        codeTableWrapper.style.display = 'none';
+        codeError.style.display = '';
+        codeErrorMsg.textContent = err.message || '加载激活码失败';
+      });
+  }
+
+  codeRetryBtn.addEventListener('click', function () {
+    loadCodes();
+  });
+
+  /*
+   * Render activation codes table.
+   */
+  function renderCodeTable(codes) {
+    codeTableBody.innerHTML = '';
+
+    if (codes.length === 0) {
+      codeTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:var(--space-xl);color:var(--color-text-muted);">暂无激活码</td></tr>';
+      return;
+    }
+
+    for (var i = 0; i < codes.length; i++) {
+      var code = codes[i];
+      var codeStr = code.code || '';
+      var status = code.activated ? '已激活' : '未激活';
+      var banned = code.banned || code.isBanned || false;
+      var bannedText = banned ? '是' : '否';
+      var activatedAt = code.activatedAt || code.activated_at || '';
+      var ipInfo = code.ip || code.activatedIP || code.activated_ip || '';
+
+      // Format activated time
+      if (activatedAt) {
+        try {
+          var d = new Date(activatedAt);
+          if (!isNaN(d.getTime())) {
+            activatedAt = d.toLocaleString('zh-CN');
+          }
+        } catch (e) {
+          // Use as-is
+        }
+      }
+
+      var tr = document.createElement('tr');
+
+      // Code
+      var tdCode = document.createElement('td');
+      tdCode.style.cssText = 'font-family:monospace;font-size:var(--font-size-xs);';
+      tdCode.textContent = codeStr;
+      tr.appendChild(tdCode);
+
+      // Status
+      var tdStatus = document.createElement('td');
+      tdStatus.textContent = status;
+      tdStatus.style.color = code.activated ? 'var(--color-success)' : 'var(--color-text-muted)';
+      tr.appendChild(tdStatus);
+
+      // Banned status
+      var tdBanned = document.createElement('td');
+      tdBanned.textContent = bannedText;
+      tdBanned.style.color = banned ? 'var(--color-danger)' : 'var(--color-text-muted)';
+      tr.appendChild(tdBanned);
+
+      // Activated time
+      var tdTime = document.createElement('td');
+      tdTime.style.cssText = 'font-size:var(--font-size-xs);';
+      tdTime.textContent = activatedAt || '-';
+      tr.appendChild(tdTime);
+
+      // IP info
+      var tdIP = document.createElement('td');
+      tdIP.style.cssText = 'font-family:monospace;font-size:var(--font-size-xs);';
+      tdIP.textContent = ipInfo || '-';
+      tr.appendChild(tdIP);
+
+      // Action: ban/unban toggle
+      var tdAction = document.createElement('td');
+      var banBtn = document.createElement('button');
+      if (banned) {
+        banBtn.className = 'btn btn-outline btn-sm';
+        banBtn.textContent = '解封';
+      } else {
+        banBtn.className = 'btn btn-danger btn-sm';
+        banBtn.textContent = '封禁';
+      }
+      banBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:28px;font-size:var(--font-size-xs);';
+      (function (c) {
+        banBtn.addEventListener('click', function () {
+          toggleBan(c);
+        });
+      })(code);
+      tdAction.appendChild(banBtn);
+      tr.appendChild(tdAction);
+
+      codeTableBody.appendChild(tr);
+    }
+  }
+
+  /*
+   * Toggle ban/unban for a code.
+   */
+  function toggleBan(code) {
+    var codeStr = code.code || '';
+    var isBanned = code.banned || code.isBanned || false;
+    var action = isBanned ? '解封' : '封禁';
+    var confirmed = confirm('确认' + action + '激活码「' + codeStr + '」？');
+    if (!confirmed) return;
+
+    API.adminBanCode(codeStr)
+      .then(function () {
+        App.toast('激活码已' + action);
+        loadCodes();
+      })
+      .catch(function (err) {
+        App.toast(err.message || action + '失败');
+      });
+  }
+
+  // -----------------------------------------------------------------------
+  // Keyboard shortcut: Escape closes modal
+  // -----------------------------------------------------------------------
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && courseModal.style.display !== 'none') {
+      closeModal();
+    }
+  });
+
+  // -----------------------------------------------------------------------
+  // Initialize page
+  // -----------------------------------------------------------------------
+  init();
+
+})();
+</script>
+
+</body>
+</html>
