@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
+// crypto will be added in Task 10 for token generation
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,12 +15,23 @@ const COURSES_FILE = path.join(DATA_DIR, 'courses.json');
 const ACTIVATIONS_FILE = path.join(DATA_DIR, 'activations.json');
 
 function readJSON(filePath) {
-  if (!fs.existsSync(filePath)) return null;
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  try {
+    if (!fs.existsSync(filePath)) return null;
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch (e) {
+    console.error(`Error reading ${filePath}:`, e.message);
+    return null;
+  }
 }
 
 function writeJSON(filePath, data) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    return true;
+  } catch (e) {
+    console.error(`Error writing ${filePath}:`, e.message);
+    return false;
+  }
 }
 
 // === Routes (to be added in Task 10) ===
