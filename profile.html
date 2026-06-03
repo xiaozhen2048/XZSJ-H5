@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>小镇刷题家 — 我的</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Sticky Page Header -->
+<div class="page-header">
+  <a href="home.html" class="back-btn">
+    <svg><use href="assets/icons.svg#icon-arrow-left"/></svg>
+  </a>
+  <div class="title">我的</div>
+</div>
+
+<!-- Page Content -->
+<div class="page-content">
+
+  <!-- Activation Info Card -->
+  <div class="section-title">激活信息</div>
+  <div id="activationCard" style="background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-card);margin-bottom:var(--space-xl);">
+    <div style="display:flex;align-items:center;gap:var(--space-md);">
+      <div style="flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--color-primary-light);border-radius:var(--radius-sm);">
+        <svg width="24" height="24" style="fill:var(--color-primary-dark);"><use href="assets/icons.svg#icon-lock"/></svg>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);margin-bottom:4px;">激活码</div>
+        <div id="activationCode" style="font-family:monospace;font-size:var(--font-size-md);font-weight:var(--font-weight-semibold);letter-spacing:0.05em;word-break:break-all;"></div>
+        <div id="activationDate" style="font-size:var(--font-size-xs);color:var(--color-text-muted);margin-top:4px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Banner -->
+  <div id="previewWarning" style="display:none;background:var(--color-tag-bg);border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-xl);text-align:center;font-size:var(--font-size-sm);color:var(--color-text-secondary);">
+    当前为预览模式，激活后可使用全部功能
+  </div>
+
+  <!-- Theme Section -->
+  <div class="section-title">主题皮肤</div>
+  <div id="themeList" style="display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-xl);"></div>
+
+  <!-- Logout Button -->
+  <button id="logoutBtn" class="btn btn-danger btn-block">退出登录</button>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  function escapeHTML(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // DOM references
+  var activationCode = document.getElementById('activationCode');
+  var activationDate = document.getElementById('activationDate');
+  var previewWarning = document.getElementById('previewWarning');
+  var themeList      = document.getElementById('themeList');
+  var logoutBtn      = document.getElementById('logoutBtn');
+
+  // Theme definitions
+  var themes = [
+    {
+      name: 'default',
+      label: '莫兰迪 · 默认',
+      type: 'swatch',
+      swatch: 'linear-gradient(135deg, #B8A9B4 0%, #C5BAB0 100%)'
+    },
+    {
+      name: 'light',
+      label: '白天模式',
+      type: 'icon',
+      icon: 'icon-sun',
+      swatch: '#FFFFFF'
+    },
+    {
+      name: 'dark',
+      label: '夜间模式',
+      type: 'icon',
+      icon: 'icon-moon',
+      swatch: '#1E1B1F'
+    }
+  ];
+
+  // Populate activation info
+  function renderActivation() {
+    if (Auth.isPreview()) {
+      previewWarning.style.display = '';
+      activationCode.textContent = '预览模式';
+      activationDate.textContent = '';
+      return;
+    }
+
+    var code = Auth.getCode();
+    if (code) {
+      // Format code as XXXX-XXXX-XXXX
+      var formatted = code;
+      if (code.length >= 8 && code.indexOf('-') === -1) {
+        formatted = code.slice(0, 4) + '-' + code.slice(4, 8);
+        if (code.length > 8) formatted += '-' + code.slice(8, 12);
+      }
+      activationCode.textContent = formatted;
+    } else {
+      activationCode.textContent = '未知';
+    }
+
+    try {
+      var data = JSON.parse(
+        localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.ACTIVATION) || '{}'
+      );
+      var at = data.activatedAt;
+      if (at) {
+        var d = new Date(at);
+        activationDate.textContent = '激活时间：' +
+          d.getFullYear() + '-' +
+          String(d.getMonth() + 1).padStart(2, '0') + '-' +
+          String(d.getDate()).padStart(2, '0');
+      } else {
+        activationDate.textContent = '';
+      }
+    } catch (e) {
+      activationDate.textContent = '';
+    }
+  }
+
+  // Render theme selection rows
+  function renderThemes() {
+    var currentTheme = Theme.current();
+    themeList.innerHTML = '';
+
+    for (var i = 0; i < themes.length; i++) {
+      var theme = themes[i];
+      var isActive = theme.name === currentTheme;
+      var borderColor = isActive ? 'var(--color-primary)' : 'var(--color-border)';
+      var borderWidth = isActive ? '2px' : '1px';
+
+      var row = document.createElement('div');
+      row.style.cssText =
+        'display:flex;align-items:center;gap:var(--space-md);' +
+        'background:var(--color-surface);border-radius:var(--radius-md);' +
+        'padding:var(--space-md) var(--space-lg);' +
+        'box-shadow:var(--shadow-card);cursor:pointer;' +
+        'border:' + borderWidth + ' solid ' + borderColor + ';' +
+        'transition:border-color var(--transition-fast),transform var(--transition-fast);';
+
+      row.addEventListener('click', (function (name) {
+        return function () {
+          Theme.apply(name);
+          renderThemes();
+        };
+      })(theme.name));
+
+      row.addEventListener('mousedown', function () {
+        this.style.transform = 'scale(0.98)';
+      });
+      row.addEventListener('mouseup', function () {
+        this.style.transform = '';
+      });
+      row.addEventListener('mouseleave', function () {
+        this.style.transform = '';
+      });
+
+      // Swatch / icon area
+      var swatchHTML = '';
+      if (theme.type === 'icon') {
+        swatchHTML =
+          '<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;' +
+          'border-radius:var(--radius-sm);flex-shrink:0;border:1px solid var(--color-border);' +
+          'background:' + theme.swatch + ';">' +
+            '<svg width="20" height="20" style="fill:var(--color-text-secondary);">' +
+              '<use href="assets/icons.svg#' + theme.icon + '"/>' +
+            '</svg>' +
+          '</div>';
+      } else {
+        swatchHTML =
+          '<div style="width:40px;height:40px;border-radius:var(--radius-sm);flex-shrink:0;' +
+          'background:' + theme.swatch + ';border:1px solid var(--color-border);"></div>';
+      }
+
+      // Checkmark for active theme
+      var checkHTML = '';
+      if (isActive) {
+        checkHTML =
+          '<div style="flex-shrink:0;">' +
+            '<svg width="20" height="20" style="fill:var(--color-primary-dark);">' +
+              '<use href="assets/icons.svg#icon-check"/>' +
+            '</svg>' +
+          '</div>';
+      }
+
+      row.innerHTML = swatchHTML +
+        '<span style="flex:1;font-size:var(--font-size-sm);">' + escapeHTML(theme.label) + '</span>' +
+        checkHTML;
+
+      themeList.appendChild(row);
+    }
+  }
+
+  // Logout handler
+  logoutBtn.addEventListener('click', function () {
+    Auth.logout();
+  });
+
+  renderActivation();
+  renderThemes();
+
+})();
+</script>
+
+</body>
+</html>
