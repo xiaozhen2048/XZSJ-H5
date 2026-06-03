@@ -10,8 +10,9 @@ const Auth = {
     }
   },
 
-  // Check if user is in preview mode (session only)
+  // Check if user is in preview mode (session only, overridden by activation)
   isPreview() {
+    if (this.isActivated()) return false;
     return sessionStorage.getItem('xzst_preview') === '1';
   },
 
