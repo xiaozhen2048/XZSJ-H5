@@ -84,26 +84,8 @@ const App = {
     return Math.abs(hash).toString(36);
   },
 
-  // Load SVG sprite inline (needed for file:// protocol compatibility)
-  loadSprite: function () {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'assets/icons.svg', false);
-    try {
-      xhr.send();
-      if (xhr.status === 200 || xhr.status === 0) {
-        var wrapper = document.createElement('div');
-        wrapper.style.display = 'none';
-        wrapper.innerHTML = xhr.responseText;
-        document.body.insertBefore(wrapper, document.body.firstChild);
-      }
-    } catch (e) {
-      console.warn('SVG sprite load failed, icons may not display:', e.message);
-    }
-  },
-
   // Page initialization: apply theme + guard auth
   init: function () {
-    this.loadSprite();
     Theme.init();
     var page = window.location.pathname.split('/').pop();
     // Don't guard: index.html (lock screen), admin.html (has own auth)
@@ -112,23 +94,6 @@ const App = {
     }
   }
 };
-
-// Load SVG sprite immediately (must happen before any rendering)
-(function () {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'assets/icons.svg', false);
-  try {
-    xhr.send();
-    if (xhr.status === 200 || xhr.status === 0) {
-      var wrapper = document.createElement('div');
-      wrapper.style.display = 'none';
-      wrapper.innerHTML = xhr.responseText;
-      document.body.insertBefore(wrapper, document.body.firstChild);
-    }
-  } catch (e) {
-    console.warn('SVG sprite load failed:', e.message);
-  }
-})();
 
 // Auto-initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
