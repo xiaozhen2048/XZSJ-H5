@@ -21,8 +21,12 @@ const API = {
     return this.request('POST', '/api/activate', { code });
   },
 
-  // Public: get all courses
-  getCourses() {
+  // Public: load from static file first (fast CDN), fallback to API
+  async getCourses() {
+    try {
+      const res = await fetch('/data/courses.json');
+      if (res.ok) return res.json();
+    } catch(e) { /* fallback */ }
     return this.request('GET', '/api/courses');
   },
 
