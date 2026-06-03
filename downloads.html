@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>小镇刷题家 — 讲义下载</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Sticky Page Header -->
+<div class="page-header">
+  <a href="home.html" class="back-btn">
+    <svg><use href="assets/icons.svg#icon-arrow-left"/></svg>
+  </a>
+  <div class="title">讲义下载</div>
+</div>
+
+<!-- Page Content -->
+<div class="page-content">
+
+  <!-- Baidu Wangpan Section -->
+  <div id="wangpanSection" style="display:none;">
+    <div class="section-title">百度网盘</div>
+    <div id="wangpanCard" style="background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-card);margin-bottom:var(--space-xl);">
+      <div style="display:flex;align-items:flex-start;gap:var(--space-md);">
+        <div style="flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--color-primary-light);border-radius:var(--radius-sm);">
+          <svg width="24" height="24" style="fill:var(--color-primary-dark);"><use href="assets/icons.svg#icon-download"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div id="wangpanLink" style="font-size:var(--font-size-sm);color:var(--color-text-secondary);word-break:break-all;margin-bottom:var(--space-sm);"></div>
+          <div style="display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-md);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-text-muted);">提取码：</span>
+            <span id="wangpanCode" style="font-family:monospace;font-size:var(--font-size-md);font-weight:var(--font-weight-semibold);background:var(--color-tag-bg);padding:4px 10px;border-radius:var(--radius-sm);letter-spacing:0.1em;"></span>
+            <button id="copyCodeBtn" style="display:inline-flex;align-items:center;justify-content:center;width:var(--touch-target);height:36px;border-radius:var(--radius-sm);border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;transition:background var(--transition-fast);">
+              <svg width="16" height="16" style="fill:var(--color-text-secondary);"><use href="assets/icons.svg#icon-copy"/></svg>
+            </button>
+          </div>
+          <button id="openWangpanBtn" class="btn btn-primary btn-sm" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="16" height="16" style="fill:currentColor;"><use href="assets/icons.svg#icon-external"/></svg>
+            打开百度网盘
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cloud Storage Section -->
+  <div id="cloudSection" style="display:none;">
+    <div class="section-title">云存储</div>
+    <div id="cloudFiles" style="display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-xl);"></div>
+  </div>
+
+  <!-- Skeleton -->
+  <div id="skeletonState">
+    <div class="skeleton skeleton-card" style="margin-bottom:var(--space-md);"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <!-- Error State -->
+  <div id="errorState" style="display:none;text-align:center;padding:var(--space-3xl) var(--space-lg);">
+    <p id="errorMsg" style="color:var(--color-text-secondary);margin-bottom:var(--space-lg);line-height:1.5;"></p>
+    <button class="btn btn-outline btn-sm" id="retryBtn">重试</button>
+  </div>
+
+  <!-- Empty State -->
+  <div id="emptyState" style="display:none;text-align:center;padding:var(--space-3xl) var(--space-lg);">
+    <p style="color:var(--color-text-muted);">讲义暂未上传</p>
+  </div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  function escapeHTML(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // DOM references
+  var wangpanSection = document.getElementById('wangpanSection');
+  var wangpanLink    = document.getElementById('wangpanLink');
+  var wangpanCode    = document.getElementById('wangpanCode');
+  var copyCodeBtn    = document.getElementById('copyCodeBtn');
+  var openWangpanBtn = document.getElementById('openWangpanBtn');
+  var cloudSection   = document.getElementById('cloudSection');
+  var cloudFiles     = document.getElementById('cloudFiles');
+  var skeletonState  = document.getElementById('skeletonState');
+  var errorState     = document.getElementById('errorState');
+  var errorMsg       = document.getElementById('errorMsg');
+  var emptyState     = document.getElementById('emptyState');
+  var retryBtn       = document.getElementById('retryBtn');
+
+  var currentBaiduUrl = '';
+
+  function showSkeleton() {
+    skeletonState.style.display = '';
+    wangpanSection.style.display = 'none';
+    cloudSection.style.display = 'none';
+    errorState.style.display = 'none';
+    emptyState.style.display = 'none';
+  }
+
+  function hideSkeleton() {
+    skeletonState.style.display = 'none';
+  }
+
+  function showError(msg) {
+    skeletonState.style.display = 'none';
+    wangpanSection.style.display = 'none';
+    cloudSection.style.display = 'none';
+    errorState.style.display = '';
+    emptyState.style.display = 'none';
+    errorMsg.textContent = msg || '加载失败，请检查网络连接';
+  }
+
+  function showEmpty() {
+    skeletonState.style.display = 'none';
+    wangpanSection.style.display = 'none';
+    cloudSection.style.display = 'none';
+    errorState.style.display = 'none';
+    emptyState.style.display = '';
+  }
+
+  function renderDownloads(downloads) {
+    hideSkeleton();
+
+    var hasBaidu = downloads && downloads.baidu && downloads.baidu.url;
+    var hasCloud = downloads && downloads.cloud && Array.isArray(downloads.cloud.files) && downloads.cloud.files.length > 0;
+
+    if (!hasBaidu && !hasCloud) {
+      showEmpty();
+      return;
+    }
+
+    // Render Baidu Wangpan
+    if (hasBaidu) {
+      var baidu = downloads.baidu;
+      currentBaiduUrl = baidu.url;
+      wangpanLink.textContent = baidu.url;
+      wangpanCode.textContent = baidu.code || '';
+      wangpanSection.style.display = '';
+    }
+
+    // Render Cloud storage
+    if (hasCloud) {
+      var files = downloads.cloud.files;
+      cloudFiles.innerHTML = '';
+
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var fileName = file.name || file.title || '未命名文件';
+        var fileUrl = file.url || '';
+
+        var fileRow = document.createElement('div');
+        fileRow.style.cssText =
+          'display:flex;align-items:center;gap:var(--space-md);' +
+          'background:var(--color-surface);border-radius:var(--radius-md);' +
+          'padding:var(--space-md) var(--space-lg);box-shadow:var(--shadow-card);' +
+          'cursor:pointer;transition:transform var(--transition-fast);';
+
+        fileRow.addEventListener('click', (function (url) {
+          return function () {
+            if (!url) {
+              App.toast('链接暂未上传');
+              return;
+            }
+            window.open(url, '_blank');
+          };
+        })(fileUrl));
+
+        fileRow.addEventListener('mousedown', function () {
+          this.style.transform = 'scale(0.98)';
+        });
+        fileRow.addEventListener('mouseup', function () {
+          this.style.transform = '';
+        });
+        fileRow.addEventListener('mouseleave', function () {
+          this.style.transform = '';
+        });
+
+        fileRow.innerHTML =
+          '<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;' +
+          'background:var(--color-primary-light);border-radius:var(--radius-sm);flex-shrink:0;">' +
+            '<svg width="22" height="22" style="fill:var(--color-primary-dark);">' +
+              '<use href="assets/icons.svg#icon-file"/>' +
+            '</svg>' +
+          '</div>' +
+          '<div style="flex:1;min-width:0;font-size:var(--font-size-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' +
+            escapeHTML(fileName) +
+          '</div>' +
+          '<div style="flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);">' +
+            '<svg width="20" height="20" style="fill:var(--color-primary);">' +
+              '<use href="assets/icons.svg#icon-download"/>' +
+            '</svg>' +
+          '</div>';
+
+        cloudFiles.appendChild(fileRow);
+      }
+
+      cloudSection.style.display = '';
+    }
+  }
+
+  function loadDownloads() {
+    showSkeleton();
+
+    API.getCourses()
+      .then(function (data) {
+        var downloads = (data && data.downloads) ? data.downloads : null;
+        renderDownloads(downloads);
+      })
+      .catch(function (err) {
+        hideSkeleton();
+        showError(err.message || '加载失败，请检查网络连接');
+      });
+  }
+
+  // Copy extraction code
+  copyCodeBtn.addEventListener('click', function () {
+    var code = wangpanCode.textContent;
+    if (code) App.copy(code);
+  });
+
+  // Open Baidu Wangpan
+  openWangpanBtn.addEventListener('click', function () {
+    if (currentBaiduUrl) {
+      window.open(currentBaiduUrl, '_blank');
+    }
+  });
+
+  // Retry
+  retryBtn.addEventListener('click', function () {
+    loadDownloads();
+  });
+
+  loadDownloads();
+
+})();
+</script>
+
+</body>
+</html>
