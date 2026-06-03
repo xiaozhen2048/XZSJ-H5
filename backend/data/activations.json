@@ -1,1 +1,12 @@
-{ "codes": {}, "adminPassword": "admin123" }
+{
+  "codes": {
+    "XZST-7462-36DE": {
+      "code": "XZST-7462-36DE",
+      "activated": false,
+      "banned": false,
+      "createdAt": "2026-06-03T07:34:00.184Z"
+    }
+  },
+  "adminPassword": "admin123",
+  "adminToken": "1bd2525fd47590aa9786d52b15dea8a968ce1a5da23615658768d1d7c5e2b497"
+}

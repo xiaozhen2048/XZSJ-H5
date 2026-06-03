@@ -119,8 +119,8 @@
    * and redirects to home.html.
    */
   function doActivate() {
-    var rawCode = input.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-    if (rawCode.length < 8) {
+    var rawCode = input.value.trim().toUpperCase();
+    if (rawCode.length < 12) {
       App.toast('请输入完整的激活码');
       return;
     }
