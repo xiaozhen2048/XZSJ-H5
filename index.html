@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>小镇刷题家 — 激活</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="lock-screen">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg width="40" height="40" style="color:#fff">
+        <use href="assets/icons.svg#icon-lock"/>
+      </svg>
+    </div>
+    <h1>小镇刷题家</h1>
+    <p>江苏行测 · 系统刷题 · 联考复盘</p>
+  </div>
+
+  <div style="width:100%;max-width:100%">
+    <div class="form-group">
+      <input
+        type="text"
+        id="codeInput"
+        class="form-input"
+        placeholder="XZST-XXXX-XXXX"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        maxlength="14"
+        style="text-align:center;text-transform:uppercase"
+      >
+    </div>
+
+    <button class="btn btn-primary btn-block" id="activateBtn">激活进入</button>
+
+    <div class="divider">或</div>
+
+    <button class="btn btn-outline btn-block" id="previewBtn">
+      <svg width="20" height="20"><use href="assets/icons.svg#icon-eye"/></svg>
+      先看看
+    </button>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  // Auto-redirect if already activated
+  if (Auth.isActivated()) {
+    window.location.replace('home.html');
+    return;
+  }
+
+  // DOM references
+  var input = document.getElementById('codeInput');
+  var activateBtn = document.getElementById('activateBtn');
+  var previewBtn = document.getElementById('previewBtn');
+
+  /*
+   * Format activation code:
+   *   - Strip all non-alphanumeric characters
+   *   - Convert to uppercase
+   *   - Limit to 12 characters
+   *   - Insert hyphens at positions 4 and 9 -> XXXX-XXXX-XXXX
+   */
+  function formatCode(raw) {
+    var cleaned = raw.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 12);
+    var parts = [];
+    if (cleaned.length > 0) parts.push(cleaned.slice(0, 4));
+    if (cleaned.length > 4) parts.push(cleaned.slice(4, 8));
+    if (cleaned.length > 8) parts.push(cleaned.slice(8, 12));
+    return parts.join('-');
+  }
+
+  /*
+   * Auto-format the input value on every change.
+   * Preserves cursor position by tracking how many raw (alphanumeric)
+   * characters precede the cursor in the old value, then positioning
+   * the cursor after the same number of raw chars in the formatted value.
+   */
+  input.addEventListener('input', function () {
+    var cursor = this.selectionStart;
+    var oldValue = this.value;
+
+    // Count raw alphanumeric characters before the cursor in the old value
+    var rawBefore = 0;
+    for (var i = 0; i < cursor && i < oldValue.length; i++) {
+      if (/[a-zA-Z0-9]/.test(oldValue[i])) rawBefore++;
+    }
+
+    var formatted = formatCode(oldValue);
+    this.value = formatted;
+
+    // Restore cursor: advance through formatted string until we have
+    // passed rawBefore alphanumeric characters (skipping hyphens)
+    var newCursor = 0;
+    var seen = 0;
+    while (newCursor < formatted.length && seen < rawBefore) {
+      if (formatted[newCursor] !== '-') seen++;
+      newCursor++;
+    }
+    this.setSelectionRange(newCursor, newCursor);
+  });
+
+  /*
+   * Activate with the current code.
+   * Disables the UI during the API call, saves the token on success,
+   * and redirects to home.html.
+   */
+  function doActivate() {
+    var rawCode = input.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    if (rawCode.length < 8) {
+      App.toast('请输入完整的激活码');
+      return;
+    }
+
+    // Loading state
+    activateBtn.textContent = '验证中...';
+    activateBtn.disabled = true;
+    previewBtn.disabled = true;
+    input.disabled = true;
+
+    API.activate(rawCode)
+      .then(function (data) {
+        Auth.saveActivation({
+          code: rawCode,
+          token: data.token,
+          activatedAt: data.activatedAt || new Date().toISOString()
+        });
+        window.location.href = 'home.html';
+      })
+      .catch(function (err) {
+        App.toast(err.message || '激活失败，请检查激活码');
+        activateBtn.textContent = '激活进入';
+        activateBtn.disabled = false;
+        previewBtn.disabled = false;
+        input.disabled = false;
+        input.focus();
+      });
+  }
+
+  // Activate button click
+  activateBtn.addEventListener('click', doActivate);
+
+  // Enter key triggers activation
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      doActivate();
+    }
+  });
+
+  // Preview mode: bypass activation and explore the app read-only
+  previewBtn.addEventListener('click', function () {
+    Auth.enterPreview();
+    window.location.href = 'home.html';
+  });
+
+})();
+</script>
+
+</body>
+</html>
