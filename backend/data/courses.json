@@ -147,6 +147,37 @@
       ]
     },
     {
+      "id": "liankao",
+      "name": "联考真题复盘",
+      "color": "#B0A090",
+      "courses": [
+        {"id": "lk-zl", "title": "资料分析-联考真题复盘", "tag": "必学", "videos": [
+          {"label": "第一套", "url": "https://meeting.tencent.com/crm/N8AgpA0wb6", "password": "1234"},
+          {"label": "第二套 河北2025", "url": "https://meeting.tencent.com/crm/29b8ovEQ6c", "password": "1234"},
+          {"label": "第三套 云南2024", "url": "https://meeting.tencent.com/crm/24kdozoz0b", "password": "1234"},
+          {"label": "第四套 河北2024", "url": "https://meeting.tencent.com/crm/N8Ayy5B540", "password": "1234"},
+          {"label": "第五套 云南2023", "url": "https://meeting.tencent.com/crm/NX4dRXY96d", "password": "1234"},
+          {"label": "第六套 河北2023", "url": "https://meeting.tencent.com/crm/2GDmEO887a", "password": "1234"}
+        ]},
+        {"id": "lk-sl", "title": "数量关系-联考真题复盘", "tag": "必学", "videos": [
+          {"label": "第一套", "url": "https://meeting.tencent.com/crm/NLRYY0QY10", "password": "1234"},
+          {"label": "第二套 河北2025", "url": "https://meeting.tencent.com/crm/NLRYY0QY10", "password": "1234"},
+          {"label": "第三套 云南2024", "url": "https://meeting.tencent.com/crm/2YDL6q5Qd0", "password": "1234"},
+          {"label": "第四套 河北2024", "url": "https://meeting.tencent.com/crm/KE1VgAq7bc", "password": "1234"},
+          {"label": "第五套 云南2023", "url": "https://meeting.tencent.com/crm/NxdPrGnP22", "password": "1234"},
+          {"label": "第六套 河北2023", "url": "https://meeting.tencent.com/crm/29OBo3L104", "password": "1234"},
+          {"label": "第七套 云南2022", "url": "https://meeting.tencent.com/crm/Ke81pXgZ4d", "password": "1234"}
+        ]},
+        {"id": "lk-pd", "title": "判断推理-联考真题复盘", "tag": "必学", "videos": [
+          {"label": "第二套 河北2025", "url": "https://meeting.tencent.com/crm/KD1a16Mpb2", "password": "1234"},
+          {"label": "第三套 云南2024", "url": "https://meeting.tencent.com/crm/KD1a16Mpb2", "password": "1234"},
+          {"label": "第四套 河北2024", "url": "https://meeting.tencent.com/crm/l5DQxp7r35", "password": "1234"},
+          {"label": "第五套 云南2023", "url": "https://meeting.tencent.com/crm/2j1z4Ma344", "password": "1234"},
+          {"label": "第六套 河北2023", "url": "https://meeting.tencent.com/crm/NxdExvvZ65", "password": "1234"}
+        ]}
+      ]
+    },
+    {
       "id": "zhenti",
       "name": "江苏真题复盘",
       "color": "#C4A882",
