@@ -89,7 +89,7 @@ const App = {
     Theme.init();
     var page = window.location.pathname.split('/').pop();
     // Don't guard: index.html (lock screen), admin.html (has own auth)
-    if (page && page !== 'index.html' && page !== '' && page !== 'admin.html') {
+    if (page && page !== 'index.html' && page !== '' && page !== 'admin.html' && page !== 'admin') {
       Auth.requireAuth();
     }
   }
