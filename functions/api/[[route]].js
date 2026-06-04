@@ -112,6 +112,22 @@ export async function onRequest(context) {
       return json({ error: '该激活码已在其他设备使用，如需换绑请联系博主' }, 403);
     }
 
+    // POST /api/feedback — submit feedback
+    if (request.method === 'POST' && path === '/feedback') {
+      const body = await parseBody(request);
+      const text = (body.text || '').trim();
+      if (!text) return json({ error: '请输入反馈内容' }, 400);
+      const data = (await env.DATA_KV.get('feedback', 'json')) || [];
+      data.push({
+        id: randomHex(8),
+        text,
+        time: new Date().toISOString(),
+        ip: request.headers.get('cf-connecting-ip') || ''
+      });
+      await env.DATA_KV.put('feedback', JSON.stringify(data));
+      return json({ success: true });
+    }
+
     // ===== ADMIN ROUTES =====
 
     // POST /api/admin/login
@@ -260,6 +276,12 @@ export async function onRequest(context) {
         ips: info.ips || [], createdAt: info.createdAt || null,
       }));
       return json({ codes: list });
+    }
+
+    // GET /api/admin/feedback
+    if (request.method === 'GET' && path === '/admin/feedback') {
+      const data = (await env.DATA_KV.get('feedback', 'json')) || [];
+      return json({ feedback: data });
     }
 
     // POST /api/admin/codes/ban

@@ -310,6 +310,17 @@
       </div>
     </div>
 
+    <!-- ===================================================================
+         Section 3: 用户反馈
+         =================================================================== -->
+    <div class="admin-section">
+      <h2>用户反馈</h2>
+      <div id="feedbackList" style="display:flex;flex-direction:column;gap:var(--space-sm);">
+        <p style="color:var(--color-text-muted);text-align:center;padding:var(--space-xl);">加载中...</p>
+      </div>
+      <button class="btn btn-outline btn-sm" id="feedbackRefresh" style="margin-top:var(--space-md);">刷新</button>
+    </div>
+
   </div>
 </div>
 
@@ -1265,6 +1276,48 @@
       closeModal();
     }
   });
+
+  // -----------------------------------------------------------------------
+  // Feedback
+  // -----------------------------------------------------------------------
+  var feedbackList = document.getElementById('feedbackList');
+  var feedbackRefresh = document.getElementById('feedbackRefresh');
+
+  function loadFeedback() {
+    feedbackList.innerHTML = '<p style="color:var(--color-text-muted);text-align:center;padding:var(--space-xl);">加载中...</p>';
+    API.adminListFeedback()
+      .then(function(data) {
+        var items = data.feedback || [];
+        if (items.length === 0) {
+          feedbackList.innerHTML = '<p style="color:var(--color-text-muted);text-align:center;padding:var(--space-xl);">暂无反馈</p>';
+          return;
+        }
+        feedbackList.innerHTML = '';
+        for (var i = items.length - 1; i >= 0; i--) {
+          var fb = items[i];
+          var div = document.createElement('div');
+          div.style.cssText = 'background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);box-shadow:var(--shadow-card);';
+          var time = '';
+          try { var d = new Date(fb.time); time = d.toLocaleString('zh-CN'); } catch(e) {}
+          div.innerHTML =
+            '<div style="font-size:var(--font-size-sm);line-height:1.6;margin-bottom:var(--space-sm);color:var(--color-text);">' + escapeHTML(fb.text) + '</div>' +
+            '<div style="font-size:var(--font-size-xs);color:var(--color-text-muted);">' + time + '</div>';
+          feedbackList.appendChild(div);
+        }
+      })
+      .catch(function(err) {
+        feedbackList.innerHTML = '<p style="color:var(--color-text-muted);text-align:center;padding:var(--space-xl);">加载失败</p>';
+      });
+  }
+
+  feedbackRefresh.addEventListener('click', loadFeedback);
+
+  // Load feedback when admin panel shown
+  var origShowAdmin = showAdminPanel;
+  showAdminPanel = function() {
+    origShowAdmin();
+    loadFeedback();
+  };
 
   // -----------------------------------------------------------------------
   // Initialize page

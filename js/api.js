@@ -68,5 +68,15 @@ const API = {
   // Admin: reorder courses
   adminReorderCourses(orders) {
     return this.request('POST', '/api/admin/courses/reorder', { orders });
+  },
+
+  // User: submit feedback
+  submitFeedback(text) {
+    return this.request('POST', '/api/feedback', { text });
+  },
+
+  // Admin: list feedback
+  adminListFeedback() {
+    return this.request('GET', '/api/admin/feedback');
   }
 };

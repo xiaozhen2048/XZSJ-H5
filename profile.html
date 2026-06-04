@@ -204,6 +204,14 @@
     当前为预览模式，激活后可使用全部功能
   </div>
 
+  <!-- Feedback Section -->
+  <div class="section-title">反馈建议</div>
+  <div style="background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-card);margin-bottom:var(--space-xl);">
+    <textarea id="feedbackInput" class="form-input" rows="3" placeholder="有什么建议或问题？告诉我~" style="margin-bottom:var(--space-md);resize:vertical;"></textarea>
+    <button id="feedbackSubmit" class="btn btn-primary btn-block">提交反馈</button>
+    <div id="feedbackMsg" style="display:none;text-align:center;margin-top:var(--space-sm);font-size:var(--font-size-xs);"></div>
+  </div>
+
   <!-- Theme Section -->
   <div class="section-title">主题皮肤</div>
   <div id="themeList" style="display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-xl);"></div>
@@ -374,6 +382,34 @@
       themeList.appendChild(row);
     }
   }
+
+  // Feedback
+  var feedbackInput = document.getElementById('feedbackInput');
+  var feedbackSubmit = document.getElementById('feedbackSubmit');
+  var feedbackMsg = document.getElementById('feedbackMsg');
+
+  feedbackSubmit.addEventListener('click', function() {
+    var text = feedbackInput.value.trim();
+    if (!text) { App.toast('请输入反馈内容'); return; }
+    feedbackSubmit.disabled = true;
+    feedbackSubmit.textContent = '提交中...';
+    API.submitFeedback(text)
+      .then(function() {
+        feedbackInput.value = '';
+        feedbackMsg.style.display = '';
+        feedbackMsg.textContent = '感谢反馈！';
+        feedbackMsg.style.color = 'var(--color-success)';
+      })
+      .catch(function(err) {
+        feedbackMsg.style.display = '';
+        feedbackMsg.textContent = err.message || '提交失败';
+        feedbackMsg.style.color = 'var(--color-danger)';
+      })
+      .finally(function() {
+        feedbackSubmit.disabled = false;
+        feedbackSubmit.textContent = '提交反馈';
+      });
+  });
 
   // Logout handler
   logoutBtn.addEventListener('click', function () {
