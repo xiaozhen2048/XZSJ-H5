@@ -404,8 +404,9 @@
               escapeHTML(vPassword).replace(/'/g, "\\'") + "', false)";
           }
 
+          // Hide password in preview mode
           var passwordBadgeHTML = '';
-          if (vPassword) {
+          if (vPassword && !isPreview) {
             var badgeOnClick = "event.stopPropagation();App.copy('" +
               escapeHTML(vPassword).replace(/'/g, "\\'") + "')";
             passwordBadgeHTML = '<div class="password-badge" onclick="' + badgeOnClick + '">' +
