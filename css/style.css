@@ -366,6 +366,21 @@ ol {
   fill: var(--color-text-muted);
 }
 
+/* Trial card: expandable with videos inside */
+.trial-card {
+  flex-wrap: wrap;
+}
+.trial-card .card-arrow svg {
+  transition: transform var(--transition-fast);
+}
+.trial-videos {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md) var(--space-md) var(--space-md);
+}
+
 
 /* ---- 4. Quick Actions Container ---- */
 .quick-actions {

@@ -181,29 +181,6 @@
   当前为预览模式，激活后可查看完整内容
 </div>
 
-<!-- Trial Section (preview mode only) -->
-<div id="trialSection" style="display:none;margin:var(--space-lg) var(--space-lg) 0;">
-  <div class="section-title" style="display:flex;align-items:center;gap:var(--space-sm);">
-    <svg width="20" height="20" style="color:var(--color-primary);"><use href="#icon-play"/></svg>
-    免费试学
-  </div>
-  <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-top:var(--space-md);">
-    <div class="video-capsule" onclick="App.openVideo('https://meeting.tencent.com/crm/l7qJn9d9b2','1234')">
-      <div class="play-icon"><svg><use href="#icon-play"/></svg></div>
-      <div class="video-label">数量关系 · 和差倍-理论+母题（数2）录制文件1</div>
-      <div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">
-        <svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234
-      </div>
-    </div>
-    <div class="video-capsule" onclick="App.openVideo('https://meeting.tencent.com/crm/2ZnWajgp11','1234')">
-      <div class="play-icon"><svg><use href="#icon-play"/></svg></div>
-      <div class="video-label">判断推理 · 推理题补充刷题（判8）录制文件1</div>
-      <div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">
-        <svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Page Content -->
 <div class="page-content">
@@ -306,14 +283,12 @@
   var emptyState   = document.getElementById('emptyState');
   var retryBtn     = document.getElementById('retryBtn');
   var previewBanner = document.getElementById('previewBanner');
-  var trialSection  = document.getElementById('trialSection');
 
   // -----------------------------------------------------------------------
   // Preview banner + trial section
   // -----------------------------------------------------------------------
   if (Auth.isPreview()) {
     previewBanner.style.display = 'block';
-    trialSection.style.display = '';
   }
 
   // -----------------------------------------------------------------------
@@ -355,6 +330,56 @@
   function renderCards(categories) {
     subjectGrid.style.display = '';
     subjectGrid.innerHTML = '';
+
+    // Trial card: only shown in preview mode (not for activated users)
+    if (Auth.isPreview()) {
+      var trialCard = document.createElement('div');
+      trialCard.className = 'subject-card trial-card';
+      trialCard.style.borderLeftColor = '#B8A9B4';
+      trialCard.style.borderTopColor = '#B8A9B4';
+      trialCard.style.cursor = 'pointer';
+      trialCard.innerHTML =
+        '<div class="card-icon">' +
+          '<svg><use href="#icon-play"/></svg>' +
+        '</div>' +
+        '<div class="card-body">' +
+          '<div class="card-title">免费试学</div>' +
+          '<div class="card-desc">2 个试听视频</div>' +
+        '</div>' +
+        '<div class="card-arrow" id="trialArrow">' +
+          '<svg><use href="#icon-chevron-down"/></svg>' +
+        '</div>' +
+        '<div class="trial-videos" id="trialVideos" style="display:none;">' +
+          '<div class="video-capsule" onclick="event.stopPropagation();App.openVideo('https://meeting.tencent.com/crm/l7qJn9d9b2','1234')">' +
+            '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
+            '<div class="video-label">数量关系 · 和差倍-理论+母题（数2）录制文件1</div>' +
+            '<div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">' +
+              '<svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234' +
+            '</div>' +
+          '</div>' +
+          '<div class="video-capsule" onclick="event.stopPropagation();App.openVideo('https://meeting.tencent.com/crm/2ZnWajgp11','1234')">' +
+            '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
+            '<div class="video-label">判断推理 · 推理题补充刷题（判8）录制文件1</div>' +
+            '<div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">' +
+              '<svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      trialCard.addEventListener('click', function(e) {
+        // Don't toggle when clicking video capsules or password badges
+        if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
+        var videos = this.querySelector('.trial-videos');
+        var arrow = this.querySelector('#trialArrow svg');
+        if (videos.style.display === 'none') {
+          videos.style.display = '';
+          arrow.style.transform = 'rotate(180deg)';
+        } else {
+          videos.style.display = 'none';
+          arrow.style.transform = '';
+        }
+      });
+      subjectGrid.appendChild(trialCard);
+    }
 
     for (var i = 0; i < categories.length; i++) {
       var cat = categories[i];
