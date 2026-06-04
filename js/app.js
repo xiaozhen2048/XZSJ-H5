@@ -88,9 +88,23 @@ const App = {
   init: function () {
     Theme.init();
     var page = window.location.pathname.split('/').pop();
-    // Don't guard: index.html (lock screen), admin.html (has own auth)
-    if (page && page !== 'index.html' && page !== '' && page !== 'admin.html' && page !== 'admin' && page !== 'trial.html' && page !== 'trial') {
-      Auth.requireAuth();
+
+    // Pages that are always accessible (no auth needed):
+    var publicPages = ['index.html', '', 'admin.html', 'admin', 'trial.html', 'trial', 'home.html'];
+
+    if (page && publicPages.indexOf(page) === -1) {
+      // These pages require FULL activation (preview is NOT enough):
+      //   course.html, downloads.html, method.html, profile.html
+      if (!Auth.isActivated()) {
+        // Preview users get redirected to trial page
+        if (Auth.isPreview()) {
+          App.toast('预览模式下无法查看，请先激活');
+          setTimeout(function() { window.location.href = 'trial.html'; }, 1000);
+        } else {
+          window.location.href = 'index.html';
+        }
+        return false;
+      }
     }
   }
 };

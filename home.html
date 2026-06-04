@@ -222,7 +222,7 @@
       <svg><use href="#icon-book"/></svg>
       <span class="quick-action-label">学习方法</span>
     </a>
-    <a href="profile.html" class="quick-action">
+    <a href="javascript:void(0)" class="quick-action" onclick="Auth.isPreview()?App.toast('激活后可查看我的页面'):location.href='profile.html'">
       <svg><use href="#icon-user"/></svg>
       <span class="quick-action-label">我的</span>
     </a>
@@ -456,7 +456,17 @@
 
       var card = document.createElement('a');
       card.className = 'subject-card';
-      card.href = 'course.html?cat=' + encodeURIComponent(courseId);
+
+      // Preview mode: redirect to trial instead of course page
+      if (Auth.isPreview()) {
+        card.href = 'javascript:void(0)';
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+          App.toast('预览模式，激活后可查看完整课程');
+        });
+      } else {
+        card.href = 'course.html?cat=' + encodeURIComponent(courseId);
+      }
 
       // Custom accent border color (mobile: left, tablet+: top)
       card.style.borderLeftColor = color;
