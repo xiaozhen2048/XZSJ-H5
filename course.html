@@ -4,171 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>小镇刷题家 — 课程</title>
-  <link rel="stylesheet" href="css/style.css?v=1780560829">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" >
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
 
-  <!-- 1. icon-arrow-left: Back arrow -->
   <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M19 12H5"/>
-    <path d="M12 19l-7-7 7-7"/>
+    <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
   </symbol>
-
-  <!-- 2. icon-chevron-right: Right chevron -->
-  <symbol id="icon-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 18l6-6-6-6"/>
-  </symbol>
-
-  <!-- 3. icon-chevron-down: Down chevron -->
   <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M6 9l6 6 6-6"/>
   </symbol>
-
-  <!-- 4. icon-play: Play triangle -->
   <symbol id="icon-play" viewBox="0 0 24 24" fill="currentColor" stroke="none">
     <path d="M8 5.14v14l11-7-11-7z"/>
   </symbol>
-
-  <!-- 5. icon-copy: Copy -->
   <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="9" y="9" width="13" height="13" rx="2"/>
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+    <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
   </symbol>
-
-  <!-- 6. icon-lock: Lock -->
-  <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3" y="11" width="18" height="11" rx="2"/>
-    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-  </symbol>
-
-  <!-- 7. icon-eye: Eye -->
-  <symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-    <circle cx="12" cy="12" r="3"/>
-  </symbol>
-
-  <!-- 8. icon-math: Calculator/math -->
   <symbol id="icon-math" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 19h16"/>
-    <path d="M4 14h16"/>
-    <path d="M4 9h16"/>
-    <path d="M9 4h1"/>
-    <path d="M14 4h1"/>
+    <path d="M4 19h16"/><path d="M4 14h16"/><path d="M4 9h16"/><path d="M9 4h1"/><path d="M14 4h1"/>
   </symbol>
-
-  <!-- 9. icon-chart: Bar chart -->
   <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="18" y1="20" x2="18" y2="10"/>
-    <line x1="12" y1="20" x2="12" y2="4"/>
-    <line x1="6" y1="20" x2="6" y2="14"/>
+    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
   </symbol>
-
-  <!-- 10. icon-brain: Brain -->
   <symbol id="icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 3a3 3 0 0 0-3 3c0 1.5-.5 2-1 3a5 5 0 0 0 0 6 3 3 0 0 0 4 3 3 3 0 0 0 4-3 5 5 0 0 0 0-6c-.5-1-1-1.5-1-3a3 3 0 0 0-3-3z"/>
     <path d="M9 9a3 3 0 0 0-3 3v1c0 1-.5 1.5-1 2.5a4 4 0 0 0 0 5 2.5 2.5 0 0 0 5 0"/>
     <path d="M15 9a3 3 0 0 1 3 3v1c0 1 .5 1.5 1 2.5a4 4 0 0 1 0 5 2.5 2.5 0 0 1-5 0"/>
   </symbol>
-
-  <!-- 11. icon-mic: Microphone -->
   <symbol id="icon-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-    <line x1="12" y1="19" x2="12" y2="23"/>
-    <line x1="8" y1="23" x2="16" y2="23"/>
+    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+    <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
   </symbol>
-
-  <!-- 12. icon-file: File/document -->
-  <symbol id="icon-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <polyline points="14 2 14 8 20 8"/>
-    <line x1="16" y1="13" x2="8" y2="13"/>
-    <line x1="16" y1="17" x2="8" y2="17"/>
-    <polyline points="10 9 9 9 8 9"/>
-  </symbol>
-
-  <!-- 13. icon-book: Book -->
   <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
   </symbol>
-
-  <!-- 14. icon-user: User -->
-  <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
-  </symbol>
-
-  <!-- 15. icon-edit: Edit/pencil -->
   <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
   </symbol>
-
-  <!-- 16. icon-trash: Trash -->
-  <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="3 6 5 6 21 6"/>
-    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-  </symbol>
-
-  <!-- 17. icon-plus: Plus -->
-  <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="12" y1="5" x2="12" y2="19"/>
-    <line x1="5" y1="12" x2="19" y2="12"/>
-  </symbol>
-
-  <!-- 18. icon-settings: Settings/gear -->
-  <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-  </symbol>
-
-  <!-- 19. icon-download: Download -->
-  <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
-  </symbol>
-
-  <!-- 20. icon-external: External link -->
-  <symbol id="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-    <polyline points="15 3 21 3 21 9"/>
-    <line x1="10" y1="14" x2="21" y2="3"/>
-  </symbol>
-
-  <!-- 21. icon-check: Checkmark -->
-  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="20 6 9 17 4 12"/>
-  </symbol>
-
-  <!-- 22. icon-x: X/close -->
-  <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="18" y1="6" x2="6" y2="18"/>
-    <line x1="6" y1="6" x2="18" y2="18"/>
-  </symbol>
-
-  <!-- 23. icon-sun: Sun -->
   <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="5"/>
-    <line x1="12" y1="1" x2="12" y2="3"/>
-    <line x1="12" y1="21" x2="12" y2="23"/>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-    <line x1="1" y1="12" x2="3" y2="12"/>
-    <line x1="21" y1="12" x2="23" y2="12"/>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
   </symbol>
-
-  <!-- 24. icon-moon: Moon -->
   <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
   </symbol>
 
 </svg>
-
 
 <!-- Sticky Page Header -->
 <div class="page-header">
@@ -179,7 +65,9 @@
     <use id="pageIconUse" href="#icon-mic"/>
   </svg>
   <div class="title" id="pageTitle" style="flex:1;">课程</div>
-  <button id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
+  <button id="themeToggle" title="切换皮肤"
+    style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);flex-shrink:0;"
+    onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
     <svg id="themeIcon" width="22" height="22"><use href="#icon-sun"/></svg>
   </button>
 </div>
@@ -187,61 +75,47 @@
 <!-- Page Content -->
 <div class="page-content">
 
-  <!-- Course List -->
   <div id="courseList" style="display:flex;flex-direction:column;gap:var(--space-md);">
     <div class="skeleton skeleton-card"></div>
     <div class="skeleton skeleton-card"></div>
     <div class="skeleton skeleton-card"></div>
   </div>
 
-  <!-- Error State -->
   <div id="errorState" style="display:none;text-align:center;padding:var(--space-3xl) var(--space-lg);">
     <p id="errorMsg" style="color:var(--color-text-secondary);margin-bottom:var(--space-lg);line-height:1.5;"></p>
-    <button class="btn btn-outline btn-sm" id="retryBtn">重试</button>
+    <button class="btn btn-outline btn-sm" id="retryBtn" onclick="location.reload()">重试</button>
   </div>
 
-  <!-- Empty State -->
   <div id="emptyState" style="display:none;text-align:center;padding:var(--space-3xl) var(--space-lg);">
     <p style="color:var(--color-text-muted);">该科目暂无课程</p>
   </div>
 
 </div>
 
-<script src="js/config.js?v=1780560829"></script>
-<script src="js/theme.js?v=1780560829"></script>
-<script src="js/api.js?v=1780560829"></script>
-<script src="js/auth.js?v=1780560829"></script>
-<script src="js/app.js?v=1780560829"></script>
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
 
 <script>
 (function () {
   'use strict';
 
-  /*
-   * Escape HTML special characters to prevent XSS.
-   * Creates a text node to leverage the browser's built-in escaping.
-   */
-  function escapeHTML(str) {
-    if (!str) return '';
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
+  // ── Utils ──────────────────────────────────────────────────
+  function esc(s) {
+    if (!s) return '';
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
   }
 
-  /*
-   * Map a category title to its corresponding SVG icon name.
-   *   "数量" -> icon-math
-   *   "资料" -> icon-chart
-   *   "判断" -> icon-brain
-   *   all others -> icon-mic
-   */
-  var iconMap = {
-    '数量关系': 'icon-math',
-    '资料分析': 'icon-chart',
-    '判断推理': 'icon-brain'
-  };
+  // HTML-escape for use inside onclick attribute strings
+  function attr(s) {
+    return esc(s).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
 
-  function getCategoryIcon(title) {
+  function getCatIcon(title) {
     var t = title || '';
     if (t.indexOf('数量') !== -1) return 'icon-math';
     if (t.indexOf('资料') !== -1) return 'icon-chart';
@@ -249,59 +123,31 @@
     return 'icon-mic';
   }
 
-  /*
-   * Global video click handler called from onclick attributes.
-   * Checks preview mode, validates URL, and opens the video.
-   */
-  window.handleVideoClick = function (e, url, password, isPreview) {
-    if (isPreview) {
-      App.toast('预览模式，激活后可观看');
-      return;
-    }
-    if (!url) {
-      App.toast('链接暂未上传');
-      return;
-    }
-    App.openVideo(url, password);
-  };
-
-  // -----------------------------------------------------------------------
-  // DOM references
-  // -----------------------------------------------------------------------
+  // ── DOM refs ───────────────────────────────────────────────
   var courseList  = document.getElementById('courseList');
   var errorState  = document.getElementById('errorState');
   var errorMsg    = document.getElementById('errorMsg');
   var emptyState  = document.getElementById('emptyState');
-  var retryBtn    = document.getElementById('retryBtn');
   var pageTitle   = document.getElementById('pageTitle');
   var pageIcon    = document.getElementById('pageIcon');
   var pageIconUse = document.getElementById('pageIconUse');
 
-  // -----------------------------------------------------------------------
-  // State management: skeleton / error / empty / content
-  // -----------------------------------------------------------------------
+  // ── State helpers ──────────────────────────────────────────
   function showSkeleton() {
-    courseList.style.display = '';
+    courseList.style.display = 'flex';
     errorState.style.display = 'none';
     emptyState.style.display = 'none';
-
-    courseList.innerHTML = '';
-    for (var i = 0; i < 3; i++) {
-      var skel = document.createElement('div');
-      skel.className = 'skeleton skeleton-card';
-      courseList.appendChild(skel);
-    }
-  }
-
-  function hideSkeleton() {
-    courseList.innerHTML = '';
+    courseList.innerHTML =
+      '<div class="skeleton skeleton-card"></div>' +
+      '<div class="skeleton skeleton-card"></div>' +
+      '<div class="skeleton skeleton-card"></div>';
   }
 
   function showError(msg) {
     courseList.style.display = 'none';
     errorState.style.display = '';
     emptyState.style.display = 'none';
-    errorMsg.textContent = msg || '加载失败，请返回重试';
+    errorMsg.textContent = msg || '加载失败';
   }
 
   function showEmpty() {
@@ -310,9 +156,7 @@
     emptyState.style.display = '';
   }
 
-  // -----------------------------------------------------------------------
-  // Normalize API response to a flat array of category objects
-  // -----------------------------------------------------------------------
+  // ── Data helpers ───────────────────────────────────────────
   function getCategoryList(data) {
     if (Array.isArray(data)) return data;
     if (data && Array.isArray(data.categories)) return data.categories;
@@ -320,404 +164,141 @@
     return [];
   }
 
-  /*
-   * Find a category by its id (checks both _id and id fields).
-   * Returns the matching category object or null.
-   */
-  function findCategory(categories, targetId) {
-    for (var i = 0; i < categories.length; i++) {
-      var c = categories[i];
-      var cid = (c._id || c.id || '').toString();
-      if (cid === targetId) return c;
+  function findCategory(cats, id) {
+    for (var i = 0; i < cats.length; i++) {
+      if (String(cats[i]._id || cats[i].id || '') === id) return cats[i];
     }
     return null;
   }
 
-  // -----------------------------------------------------------------------
-  // Render course cards for a given category
-  // -----------------------------------------------------------------------
+  // ── Build HTML ─────────────────────────────────────────────
+  function buildVideoCapsules(videos) {
+    if (!videos || videos.length === 0) return '';
+    var html = '';
+    for (var i = 0; i < videos.length; i++) {
+      var vd = videos[i];
+      var label = esc(vd.label || ('视频 ' + (i + 1)));
+      var url = attr(vd.url || '');
+      var pw = attr(vd.password || '');
+      var onClick = url
+        ? ("App.openVideo('" + url + "','" + pw + "')")
+        : (Auth.isPreview() ? "App.toast('预览模式，激活后可观看')" : "App.toast('链接暂未上传')");
+
+      var badgeHTML = '';
+      if (vd.password && !Auth.isPreview()) {
+        badgeHTML = '<div class="password-badge" onclick="event.stopPropagation();App.copy(\'' + attr(vd.password) + '\')">' +
+          '<svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>' +
+          esc(vd.password) + '</div>';
+      }
+
+      html += '<div class="video-capsule" onclick="' + onClick + '">' +
+        '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
+        '<div class="video-label">' + label + '</div>' +
+        badgeHTML + '</div>';
+    }
+    return '<div class="video-capsules">' + html + '</div>';
+  }
+
+  function buildCourseCard(course) {
+    var title = esc(course.title || '未命名课程');
+    var tag = course.tag || '';
+    var tagHTML = tag
+      ? '<span class="tag' + (tag === '必学' ? ' required' : '') + '">' + esc(tag) + '</span>'
+      : '';
+    var videoCount = (course.videos || []).length;
+    var metaHTML = (tagHTML || videoCount > 0)
+      ? '<div class="course-meta">' + tagHTML + (tagHTML && videoCount ? ' ' : '') + (videoCount ? videoCount + '个视频' : '') + '</div>'
+      : '';
+
+    return '<div class="course-card">' +
+      // onclick on header toggles expanded on the card
+      '<div class="course-header" onclick="event.stopPropagation();this.parentElement.classList.toggle(\'expanded\')">' +
+        '<div class="course-icon"><svg><use href="#icon-play"/></svg></div>' +
+        '<div class="course-info">' +
+          '<div class="course-title">' + title + '</div>' +
+          metaHTML +
+        '</div>' +
+        '<div class="expand-icon"><svg><use href="#icon-chevron-down"/></svg></div>' +
+      '</div>' +
+      buildVideoCapsules(course.videos || []) +
+      '</div>';
+  }
+
+  function buildGroupCard(group) {
+    var name = esc(group.name);
+    var courses = (group.courses || []).slice().sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+    var icon = (name === '理论母题') ? 'icon-book' : 'icon-edit';
+
+    var innerHTML = '';
+    for (var i = 0; i < courses.length; i++) {
+      innerHTML += buildCourseCard(courses[i]);
+    }
+
+    return '<div class="course-card group-card">' +
+      '<div class="course-header" onclick="event.stopPropagation();this.parentElement.classList.toggle(\'expanded\')">' +
+        '<div class="course-icon" style="background:var(--color-primary);"><svg><use href="#' + icon + '"/></svg></div>' +
+        '<div class="course-info">' +
+          '<div class="course-title">' + name + '</div>' +
+          '<div class="course-meta">' + courses.length + '门课</div>' +
+        '</div>' +
+        '<div class="expand-icon"><svg><use href="#icon-chevron-down"/></svg></div>' +
+      '</div>' +
+      '<div class="video-capsules group-courses">' + innerHTML + '</div>' +
+      '</div>';
+  }
+
+  // ── Render ─────────────────────────────────────────────────
   function renderCourses(category) {
-    hideSkeleton();
-
     var catName = category.name || category.title || '课程';
-
-    // Support both new groups[] and old courses[] format
     var groups = category.groups || [];
     var flatCourses = category.courses || [];
 
-    // Update page header
     pageTitle.textContent = catName;
-    var headerIcon = getCategoryIcon(catName);
-    pageIconUse.setAttribute('href', '#' + headerIcon);
+    pageIconUse.setAttribute('href', '#' + getCatIcon(catName));
     pageIcon.style.display = '';
 
-    // Total course count
-    var totalCourses = 0;
+    var total = groups.length > 0
+      ? groups.reduce(function(s, g) { return s + (g.courses || []).length; }, 0)
+      : flatCourses.length;
+
+    if (total === 0) { showEmpty(); return; }
+
+    courseList.style.display = 'flex';
+
+    var html = '';
     if (groups.length > 0) {
       for (var g = 0; g < groups.length; g++) {
-        totalCourses += (groups[g].courses || []).length;
+        html += buildGroupCard(groups[g]);
       }
     } else {
-      totalCourses = flatCourses.length;
-    }
-    if (totalCourses === 0) {
-      showEmpty();
-      return;
-    }
-
-    courseList.style.display = '';
-    courseList.innerHTML = '';
-
-    // Build a single course card (for flat categories without groups)
-    function buildCourseCard(course) {
-      var courseTitle = course.title || course.name || '未命名课程';
-      var courseTag = course.tag || '';
-      var tagClass = (courseTag === '必学') ? 'tag required' : 'tag';
-      var videos = course.videos || [];
-      var videoCount = videos.length;
-
-      var tagHTML = '';
-      if (courseTag) {
-        tagHTML = '<span class="' + tagClass + '">' + escapeHTML(courseTag) + '</span>';
-      }
-
-      var metaHTML = '';
-      var metaParts = [];
-      if (courseTag) metaParts.push(tagHTML);
-      if (videoCount > 0) metaParts.push(videoCount + '个视频');
-      if (metaParts.length > 0) metaHTML = metaParts.join(' ');
-
-      var videosHTML = '';
-      if (videoCount > 0) {
-        for (var v = 0; v < videos.length; v++) {
-          var video = videos[v];
-          var vLabel = video.label || video.title || '视频 ' + (v + 1);
-          var vUrl = video.url || '';
-          var vPassword = video.password || video.pwd || '';
-          var isPreview = Auth.isPreview();
-
-          var capsuleOnClick = '';
-          if (isPreview) {
-            capsuleOnClick = "App.toast('预览模式，激活后可观看')";
-          } else if (!vUrl) {
-            capsuleOnClick = "App.toast('链接暂未上传')";
-          } else {
-            capsuleOnClick = "handleVideoClick(event, '" +
-              escapeHTML(vUrl).replace(/'/g, "\\'") + "', '" +
-              escapeHTML(vPassword).replace(/'/g, "\\'") + "', false)";
-          }
-
-          // Hide password in preview mode
-          var passwordBadgeHTML = '';
-          if (vPassword && !isPreview) {
-            var badgeOnClick = "event.stopPropagation();App.copy('" +
-              escapeHTML(vPassword).replace(/'/g, "\\'") + "')";
-            passwordBadgeHTML = '<div class="password-badge" onclick="' + badgeOnClick + '">' +
-              '<svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;">' +
-              '<use href="#icon-copy"/>' +
-              '</svg>' +
-              escapeHTML(vPassword) +
-              '</div>';
-          }
-
-          videosHTML +=
-            '<div class="video-capsule" onclick="' + capsuleOnClick + '">' +
-              '<div class="play-icon">' +
-                '<svg><use href="#icon-play"/></svg>' +
-              '</div>' +
-              '<div class="video-label">' + escapeHTML(vLabel) + '</div>' +
-              passwordBadgeHTML +
-            '</div>';
-        }
-      }
-
-      return '<div class="course-card">' +
-        '<div class="course-header">' +
-          '<div class="course-icon">' +
-            '<svg><use href="#icon-play"/></svg>' +
-          '</div>' +
-          '<div class="course-info">' +
-            '<div class="course-title">' + escapeHTML(courseTitle) + '</div>' +
-            (metaHTML ? '<div class="course-meta">' + metaHTML + '</div>' : '') +
-          '</div>' +
-          '<div class="expand-icon">' +
-            '<svg><use href="#icon-chevron-down"/></svg>' +
-          '</div>' +
-        '</div>' +
-        (videosHTML ? '<div class="video-capsules">' + videosHTML + '</div>' : '') +
-      '</div>';
-    }
-
-    // If no groups, render flat course cards using DOM
-    if (groups.length === 0) {
       for (var c = 0; c < flatCourses.length; c++) {
-        var fc = flatCourses[c];
-        var fCard = document.createElement('div');
-        fCard.className = 'course-card';
-
-        var fHeader = document.createElement('div');
-        fHeader.className = 'course-header';
-        fHeader.innerHTML =
-          '<div class="course-icon">' +
-            '<svg><use href="#icon-play"/></svg>' +
-          '</div>' +
-          '<div class="course-info">' +
-            '<div class="course-title">' + escapeHTML(fc.title || '未命名课程') + '</div>' +
-            (fc.tag ? '<div class="course-meta"><span class="' + (fc.tag === '必学' ? 'tag required' : 'tag') + '">' + escapeHTML(fc.tag) + '</span> ' + (fc.videos || []).length + '个视频</div>' : '') +
-          '</div>' +
-          '<div class="expand-icon">' +
-            '<svg><use href="#icon-chevron-down"/></svg>' +
-          '</div>';
-        fCard.appendChild(fHeader);
-
-        // Direct click handler
-        (function(card) {
-          fHeader.addEventListener('click', function(e) {
-            if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
-            e.stopPropagation();
-            var vc = card.querySelector(':scope > .video-capsules');
-            if (vc) {
-              var isHidden = vc.style.display === 'none' || getComputedStyle(vc).display === 'none';
-              vc.style.display = isHidden ? 'flex' : 'none';
-              var arrow = card.querySelector(':scope > .course-header .expand-icon');
-              if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
-            }
-          });
-        })(fCard);
-
-        var fVideos = fc.videos || [];
-        if (fVideos.length > 0) {
-          var fVcaps = document.createElement('div');
-          fVcaps.className = 'video-capsules';
-          fVcaps.style.display = 'none';
-          for (var v = 0; v < fVideos.length; v++) {
-            var fv = fVideos[v];
-            var fCap = document.createElement('div');
-            fCap.className = 'video-capsule';
-            fCap.addEventListener('click', function(ev) {
-              ev.stopPropagation();
-              var vd = this._videoData;
-              if (Auth.isPreview()) { App.toast('预览模式，激活后可观看'); return; }
-              if (!vd.url) { App.toast('链接暂未上传'); return; }
-              App.openVideo(vd.url, vd.password);
-            });
-            fCap._videoData = { url: fv.url || '', password: fv.password || '' };
-            fCap.innerHTML =
-              '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
-              '<div class="video-label">' + escapeHTML(fv.label || ('视频 ' + (v + 1))) + '</div>' +
-              (fv.password && !Auth.isPreview() ? '<div class="password-badge"><svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>' + escapeHTML(fv.password) + '</div>' : '');
-            fVcaps.appendChild(fCap);
-          }
-          fCard.appendChild(fVcaps);
-        }
-        courseList.appendChild(fCard);
+        html += buildCourseCard(flatCourses[c]);
       }
-      return;
     }
 
-    // Render groups as expandable section cards
-    for (var g = 0; g < groups.length; g++) {
-      var group = groups[g];
-      var groupCourses = (group.courses || []).slice().sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
-      var groupName = group.name;
-
-      // Build group section (expandable card)
-      var groupCard = document.createElement('div');
-      groupCard.className = 'course-card group-card';
-
-      // Group header
-      var groupHeader = document.createElement('div');
-      groupHeader.className = 'course-header';
-
-      var groupIcon = (groupName === '理论母题') ? 'icon-book' : 'icon-edit';
-      groupHeader.innerHTML =
-        '<div class="course-icon" style="background:var(--color-primary);">' +
-          '<svg><use href="#' + groupIcon + '"/></svg>' +
-        '</div>' +
-        '<div class="course-info">' +
-          '<div class="course-title">' + escapeHTML(groupName) + '</div>' +
-          '<div class="course-meta">' + groupCourses.length + '门课</div>' +
-        '</div>' +
-        '<div class="expand-icon">' +
-          '<svg><use href="#icon-chevron-down"/></svg>' +
-        '</div>';
-
-      groupCard.appendChild(groupHeader);
-
-      // Course list inside group (hidden when collapsed)
-      var courseListInner = document.createElement('div');
-      courseListInner.className = 'video-capsules group-courses';
-      courseListInner.style.display = 'none';
-
-      // Group header click: toggle inner courses
-      (function(inner, arrow) {
-        groupHeader.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var isHidden = inner.style.display === 'none';
-          inner.style.display = isHidden ? 'flex' : 'none';
-          arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
-        });
-      })(courseListInner, groupHeader.querySelector('.expand-icon'));
-
-      // Build nested course cards using DOM (same approach as group cards)
-      for (var c = 0; c < groupCourses.length; c++) {
-        var course = groupCourses[c];
-        var courseCard = document.createElement('div');
-        courseCard.className = 'course-card';
-
-        // Course header
-        var courseHeader = document.createElement('div');
-        courseHeader.className = 'course-header';
-        courseHeader.innerHTML =
-          '<div class="course-icon">' +
-            '<svg><use href="#icon-play"/></svg>' +
-          '</div>' +
-          '<div class="course-info">' +
-            '<div class="course-title">' + escapeHTML(course.title || '未命名课程') + '</div>' +
-            (course.tag ? '<div class="course-meta"><span class="' + (course.tag === '必学' ? 'tag required' : 'tag') + '">' + escapeHTML(course.tag) + '</span> ' + (course.videos || []).length + '个视频</div>' : '') +
-          '</div>' +
-          '<div class="expand-icon">' +
-            '<svg><use href="#icon-chevron-down"/></svg>' +
-          '</div>';
-
-        courseCard.appendChild(courseHeader);
-
-        // DIRECT click handler: toggle video-capsules display directly
-        (function(card) {
-          courseHeader.addEventListener('click', function(e) {
-            if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
-            e.stopPropagation();
-            var vc = card.querySelector(':scope > .video-capsules');
-            if (vc) {
-              var isHidden = vc.style.display === 'none' || getComputedStyle(vc).display === 'none';
-              vc.style.display = isHidden ? 'flex' : 'none';
-              var arrow = card.querySelector(':scope > .course-header .expand-icon');
-              if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
-            }
-          });
-        })(courseCard);
-
-        // Video capsules
-        var videos = course.videos || [];
-        if (videos.length > 0) {
-          var vcaps = document.createElement('div');
-          vcaps.className = 'video-capsules';
-          vcaps.style.display = 'none';
-
-          for (var v = 0; v < videos.length; v++) {
-            var video = videos[v];
-            var capsule = document.createElement('div');
-            capsule.className = 'video-capsule';
-            capsule.addEventListener('click', function(ev) {
-              ev.stopPropagation();
-              var vd = this._videoData;
-              if (Auth.isPreview()) { App.toast('预览模式，激活后可观看'); return; }
-              if (!vd.url) { App.toast('链接暂未上传'); return; }
-              App.openVideo(vd.url, vd.password);
-            });
-            capsule._videoData = { url: video.url || '', password: video.password || '' };
-
-            var playIcon = document.createElement('div');
-            playIcon.className = 'play-icon';
-            playIcon.innerHTML = '<svg><use href="#icon-play"/></svg>';
-            capsule.appendChild(playIcon);
-
-            var label = document.createElement('div');
-            label.className = 'video-label';
-            label.textContent = video.label || ('视频 ' + (v + 1));
-            capsule.appendChild(label);
-
-            if (video.password && !Auth.isPreview()) {
-              var badge = document.createElement('div');
-              badge.className = 'password-badge';
-              badge.addEventListener('click', function(ev) {
-                ev.stopPropagation();
-                App.copy(this._pwd);
-              });
-              badge._pwd = video.password;
-              badge.innerHTML = '<svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>' + escapeHTML(video.password);
-              capsule.appendChild(badge);
-            }
-
-            vcaps.appendChild(capsule);
-          }
-          courseCard.appendChild(vcaps);
-        }
-
-        courseListInner.appendChild(courseCard);
-      }
-      groupCard.appendChild(courseListInner);
-
-      courseList.appendChild(groupCard);
-    }
+    courseList.innerHTML = html;
   }
 
-  // -----------------------------------------------------------------------
-  // Fetch courses from API and render the matching category
-  // -----------------------------------------------------------------------
+  // ── Load data ──────────────────────────────────────────────
   function loadCourses() {
     var catId = App.getParam('cat');
-
-    if (!catId) {
-      showError('缺少科目参数，请返回重试');
-      return;
-    }
-
+    if (!catId) { showError('缺少科目参数，请返回重试'); return; }
     showSkeleton();
 
     API.getCourses()
       .then(function (data) {
-        var categories = getCategoryList(data);
-
-        if (categories.length === 0) {
-          showEmpty();
-          return;
-        }
-
-        var category = findCategory(categories, catId);
-
-        if (!category) {
-          showError('科目不存在，请返回重试');
-          return;
-        }
-
-        renderCourses(category);
+        var cats = getCategoryList(data);
+        if (cats.length === 0) { showEmpty(); return; }
+        var cat = findCategory(cats, catId);
+        if (!cat) { showError('科目不存在，请返回重试'); return; }
+        renderCourses(cat);
       })
       .catch(function (err) {
-        hideSkeleton();
         showError(err.message || '加载失败，请返回重试');
       });
   }
 
-  // -----------------------------------------------------------------------
-  // Event delegation: handle all expand/collapse clicks
-  // -----------------------------------------------------------------------
-  courseList.addEventListener('click', function (e) {
-    var header = e.target.closest('.course-header');
-    if (!header) return;
-    // Don't toggle if clicking a video capsule or password badge
-    if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
-    e.stopPropagation();
-    var card = header.parentElement;
-    if (card && card.classList.contains('course-card')) {
-      card.classList.toggle('expanded');
-    }
-  });
-
-  // -----------------------------------------------------------------------
-  // Retry button
-  // -----------------------------------------------------------------------
-  retryBtn.addEventListener('click', function () {
-    loadCourses();
-  });
-
-  // -----------------------------------------------------------------------
-  // Initialize
-  // -----------------------------------------------------------------------
-  // Auth guard is handled by App.init() on DOMContentLoaded.
-  // Load courses immediately; auth redirect (if needed) wins the race.
-  loadCourses();
-
+  // ── Theme icon ─────────────────────────────────────────────
   window.updateThemeIcon = function() {
     var icon = document.getElementById('themeIcon');
     if (!icon) return;
@@ -728,6 +309,9 @@
     else use.setAttribute('href', '#icon-sun');
   };
   updateThemeIcon();
+
+  // ── Go ─────────────────────────────────────────────────────
+  loadCourses();
 
 })();
 </script>

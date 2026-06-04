@@ -132,7 +132,7 @@
   --color-primary-light: #6E626B;
   --color-primary-dark: #B8A9B4;
   --color-accent: #8C827A;
-  --color-accent-light: #5E5650;
+  --color-accent-light: #6E6660;
   --color-success: #7A9A7A;
   --color-danger: #B8807A;
   --color-tag-bg: #332E33;
@@ -576,7 +576,6 @@ ol {
 .group-courses > .course-card .course-header .expand-icon svg {
   width: 20px;
   height: 20px;
-}
 }
 
 .course-card.expanded .course-header .expand-icon {
