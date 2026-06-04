@@ -187,6 +187,45 @@
                   "password": "1234"
                 }
               ]
+            },
+            {
+              "id": "sl-11",
+              "title": "和差倍比补充刷题（数3）",
+              "tag": "必学",
+              "videos": [
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/2ZemB4rEaf",
+                  "password": "1234"
+                },
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/29dnopr467",
+                  "password": "1234"
+                }
+              ]
+            },
+            {
+              "id": "sl-12",
+              "title": "数量专刷三组（数5）",
+              "tag": "必学",
+              "videos": [
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/Nx97dZWd2a",
+                  "password": "1234"
+                },
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/2rYXGDMw6f",
+                  "password": "1234"
+                },
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/N1b6Rjqrc1",
+                  "password": "1234"
+                }
+              ]
             }
           ]
         }
