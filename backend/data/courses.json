@@ -277,12 +277,7 @@
                   "password": "1234"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "name": "强化刷题",
-          "courses": [
+            },
             {
               "id": "zl-02",
               "title": "资料考点-实操（资4）",
@@ -295,6 +290,23 @@
                 }
               ]
             },
+            {
+              "id": "zl-09",
+              "title": "资料速算-速算练习（资3）",
+              "tag": "必学",
+              "videos": [
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/lvpkxoL273",
+                  "password": "1234"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "强化刷题",
+          "courses": [
             {
               "id": "zl-04",
               "title": "套题1（资5）",
