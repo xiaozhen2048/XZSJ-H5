@@ -121,26 +121,26 @@
 
 /* ---- Dark Theme: deep purple / charcoal ---- */
 [data-theme="dark"] {
-  --color-bg: #1E1B1F;
-  --color-surface: #2A262B;
-  --color-text: #E0DCE0;
-  --color-text-secondary: #A8A0A8;
-  --color-text-muted: #6E666E;
-  --color-border: #3A343B;
-  --color-shadow: rgba(0, 0, 0, 0.2);
-  --color-primary: #9B8E97;
+  --color-bg: #1A171B;
+  --color-surface: #2C282E;
+  --color-text: #EDE9ED;
+  --color-text-secondary: #BFB8BF;
+  --color-text-muted: #8A828A;
+  --color-border: #403A42;
+  --color-shadow: rgba(0, 0, 0, 0.25);
+  --color-primary: #A898A0;
   --color-primary-light: #6E626B;
-  --color-primary-dark: #B8A9B4;
-  --color-accent: #8C827A;
-  --color-accent-light: #6E6660;
-  --color-success: #7A9A7A;
-  --color-danger: #B8807A;
-  --color-tag-bg: #332E33;
-  --color-tag-text: #A8A0A8;
+  --color-primary-dark: #C5B8C0;
+  --color-accent: #968C84;
+  --color-accent-light: #3F3A37;
+  --color-success: #7FA07F;
+  --color-danger: #C4908A;
+  --color-tag-bg: #383338;
+  --color-tag-text: #BFB8BF;
   --gradient-header: linear-gradient(135deg, #3A343B 0%, #2E2A2E 100%);
-  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 4px 24px rgba(0, 0, 0, 0.4);
-  --shadow-button: 0 2px 8px rgba(155, 142, 151, 0.2);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-button: 0 2px 8px rgba(168, 152, 160, 0.25);
 }
 
 
@@ -161,6 +161,13 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+/* Eliminate 300ms tap delay on mobile */
+a, button, .course-header, .subject-card, .video-capsule, .quick-action,
+[onclick], .clickable {
+  touch-action: manipulation;
 }
 
 body {
@@ -267,9 +274,14 @@ ol {
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-lg);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   z-index: 10;
+}
+[data-theme="dark"] .page-header {
+  background: rgba(42, 38, 43, 0.85);
 }
 
 .page-header .back-btn {
@@ -440,7 +452,7 @@ ol {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   overflow: hidden;
-  transition: box-shadow var(--transition-normal);
+  transition: box-shadow var(--transition-normal), transform var(--transition-fast);
   cursor: pointer;
 }
 
@@ -581,6 +593,39 @@ ol {
   transform: rotate(180deg);
 }
 
+/* Expand/collapse animation */
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.course-card.expanded > .video-capsules,
+.course-card.expanded > .group-courses {
+  animation: expandIn 0.25s ease;
+}
+
+/* Press feedback on course headers */
+.course-header:active {
+  background: rgba(0, 0, 0, 0.03);
+}
+[data-theme="dark"] .course-header:active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Card press feedback */
+.subject-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-card);
+}
+.quick-action:active {
+  transform: scale(0.95);
+  background: var(--color-bg);
+}
+
+/* Video capsule press */
+.video-capsule:active {
+  background: var(--color-border);
+}
+
 
 /* ---- 7. Tag ---- */
 .tag {
@@ -648,6 +693,8 @@ ol {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
   background: var(--color-primary);
   border-radius: var(--radius-full);
   flex-shrink: 0;
@@ -784,12 +831,13 @@ ol {
   top: var(--space-xl);
   left: 50%;
   transform: translateX(-50%) translateY(-120px);
-  background: #3D3535;
-  color: #FFFFFF;
+  background: var(--color-text);
+  color: var(--color-surface);
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-full);
   font-size: 0.8125rem;
   font-weight: var(--font-weight-medium);
+  z-index: 100;
   z-index: 1000;
   pointer-events: none;
   transition: transform var(--transition-normal);

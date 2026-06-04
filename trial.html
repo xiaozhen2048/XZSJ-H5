@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/style.css?v=1780587475">
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
 
   <!-- 1. icon-arrow-left: Back arrow -->
   <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -26,44 +26,58 @@
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
   </symbol>
 
+  <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9l6 6 6-6"/>
+  </symbol>
+
+  <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </symbol>
+  <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </symbol>
+
 </svg>
 
 <!-- Sticky Page Header -->
-<div class="page-header" style="background:linear-gradient(135deg, #C5A880 0%, #D4B896 100%);">
+<div class="page-header">
   <a href="home.html" class="back-btn">
     <svg><use href="#icon-arrow-left"/></svg>
   </a>
-  <svg width="22" height="22" style="flex-shrink:0;color:#fff;">
+  <svg width="22" height="22" style="flex-shrink:0;color:var(--color-primary-dark);">
     <use href="#icon-play"/>
   </svg>
-  <div class="title" style="color:#fff;flex:1;">免费试学</div>
-  <button id="themeToggle" title="切换皮肤" style="background:rgba(255,255,255,0.2);border:none;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
-    <svg id="themeIcon" width="20" height="20" style="color:#fff;"><use href="#icon-sun"/></svg>
+  <div class="title" style="flex:1;">免费试学</div>
+  <button id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
+    <svg id="themeIcon" width="22" height="22"><use href="#icon-sun"/></svg>
   </button>
 </div>
 
 <!-- Page Content -->
 <div class="page-content">
 
-  <div style="background:linear-gradient(135deg, #FDF8F0 0%, #FBF3E6 100%);border:1px solid #E8D5B0;border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-lg);font-size:var(--font-size-sm);color:#8B7355;line-height:1.5;">
+  <div style="background:var(--color-primary-light);border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-lg);font-size:var(--font-size-sm);color:var(--color-primary-dark);line-height:1.5;">
     以下是两节试听课程，无需激活即可观看。完整课程请获取激活码后解锁。
   </div>
 
   <!-- Trial Videos -->
   <div style="display:flex;flex-direction:column;gap:var(--space-md);">
-    <div class="course-card expanded" style="border-left:4px solid #C5A880;">
+    <div class="course-card expanded">
       <div class="course-header">
-        <div class="course-icon" style="background:#FDF3E4;">
-          <svg style="color:#C5A880;"><use href="#icon-play"/></svg>
-        </div>
+        <div class="course-icon"><svg><use href="#icon-play"/></svg></div>
         <div class="course-info">
           <div class="course-title">数量关系 · 和差倍-理论+母题（数2）</div>
-          <div class="course-meta"><span style="display:inline-block;background:#FDF3E4;color:#B8956A;font-size:var(--font-size-xs);padding:1px 8px;border-radius:var(--radius-full);margin-right:4px;">免费试听</span>1个视频</div>
+          <div class="course-meta"><span class="tag">免费试听</span> 1个视频</div>
         </div>
+        <div class="expand-icon"><svg><use href="#icon-chevron-down"/></svg></div>
       </div>
       <div class="video-capsules">
-        <div class="video-capsule" onclick="App.openVideo('https://meeting.tencent.com/crm/l7qJn9d9b2','1234')">
-          <div class="play-icon" style="background:#C5A880;"><svg><use href="#icon-play"/></svg></div>
+        <div class="video-capsule" onclick="event.stopPropagation();App.openVideo('https://meeting.tencent.com/crm/l7qJn9d9b2','1234')">
+          <div class="play-icon"><svg><use href="#icon-play"/></svg></div>
           <div class="video-label">录制文件1</div>
           <div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">
             <svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234
@@ -72,19 +86,18 @@
       </div>
     </div>
 
-    <div class="course-card expanded" style="border-left:4px solid #C5A880;">
+    <div class="course-card expanded">
       <div class="course-header">
-        <div class="course-icon" style="background:#FDF3E4;">
-          <svg style="color:#C5A880;"><use href="#icon-play"/></svg>
-        </div>
+        <div class="course-icon"><svg><use href="#icon-play"/></svg></div>
         <div class="course-info">
           <div class="course-title">判断推理 · 推理题补充刷题（判8）</div>
-          <div class="course-meta"><span style="display:inline-block;background:#FDF3E4;color:#B8956A;font-size:var(--font-size-xs);padding:1px 8px;border-radius:var(--radius-full);margin-right:4px;">免费试听</span>1个视频</div>
+          <div class="course-meta"><span class="tag">免费试听</span> 1个视频</div>
         </div>
+        <div class="expand-icon"><svg><use href="#icon-chevron-down"/></svg></div>
       </div>
       <div class="video-capsules">
-        <div class="video-capsule" onclick="App.openVideo('https://meeting.tencent.com/crm/2ZnWajgp11','1234')">
-          <div class="play-icon" style="background:#C5A880;"><svg><use href="#icon-play"/></svg></div>
+        <div class="video-capsule" onclick="event.stopPropagation();App.openVideo('https://meeting.tencent.com/crm/2ZnWajgp11','1234')">
+          <div class="play-icon"><svg><use href="#icon-play"/></svg></div>
           <div class="video-label">录制文件1</div>
           <div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">
             <svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234
