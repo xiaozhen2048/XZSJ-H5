@@ -331,71 +331,24 @@
     subjectGrid.style.display = '';
     subjectGrid.innerHTML = '';
 
-    // Trial card: only shown in preview mode (not for activated users)
+    // Trial card: only shown in preview mode, links to trial.html
     if (Auth.isPreview()) {
-      var trialCard = document.createElement('div');
-      trialCard.className = 'subject-card trial-card';
+      var trialCard = document.createElement('a');
+      trialCard.className = 'subject-card';
+      trialCard.href = 'trial.html';
       trialCard.style.borderLeftColor = '#B8A9B4';
       trialCard.style.borderTopColor = '#B8A9B4';
-      trialCard.style.cursor = 'pointer';
-      // Card header
-      var hdr = document.createElement('div');
-      hdr.style.cssText = 'display:flex;align-items:center;gap:var(--space-md);width:100%;';
-      // Icon
-      var iconDiv = document.createElement('div');
-      iconDiv.className = 'card-icon';
-      iconDiv.innerHTML = '<svg><use href="#icon-play"/></svg>';
-      hdr.appendChild(iconDiv);
-      // Body
-      var bodyDiv = document.createElement('div');
-      bodyDiv.className = 'card-body';
-      bodyDiv.innerHTML = '<div class="card-title">免费试学</div><div class="card-desc">2 个试听视频</div>';
-      hdr.appendChild(bodyDiv);
-      // Arrow
-      var arrowDiv = document.createElement('div');
-      arrowDiv.className = 'card-arrow';
-      arrowDiv.id = 'trialArrow';
-      arrowDiv.innerHTML = '<svg><use href="#icon-chevron-down"/></svg>';
-      hdr.appendChild(arrowDiv);
-      trialCard.appendChild(hdr);
-      // Video list (hidden by default)
-      var videosDiv = document.createElement('div');
-      videosDiv.className = 'trial-videos';
-      videosDiv.style.display = 'none';
-      // Trial video 1: 数量关系
-      var v1 = document.createElement('div');
-      v1.className = 'video-capsule';
-      v1.addEventListener('click', function(ev) { ev.stopPropagation(); App.openVideo('https://meeting.tencent.com/crm/l7qJn9d9b2','1234'); });
-      v1.innerHTML = '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
-        '<div class="video-label">数量关系 &middot; 和差倍-理论+母题（数2）录制文件1</div>' +
-        '<div class="password-badge"><svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234</div>';
-      var badge1 = v1.querySelector('.password-badge');
-      badge1.addEventListener('click', function(ev) { ev.stopPropagation(); App.copy('1234'); });
-      videosDiv.appendChild(v1);
-      // Trial video 2: 判断推理
-      var v2 = document.createElement('div');
-      v2.className = 'video-capsule';
-      v2.addEventListener('click', function(ev) { ev.stopPropagation(); App.openVideo('https://meeting.tencent.com/crm/2ZnWajgp11','1234'); });
-      v2.innerHTML = '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
-        '<div class="video-label">判断推理 &middot; 推理题补充刷题（判8）录制文件1</div>' +
-        '<div class="password-badge"><svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234</div>';
-      var badge2 = v2.querySelector('.password-badge');
-      badge2.addEventListener('click', function(ev) { ev.stopPropagation(); App.copy('1234'); });
-      videosDiv.appendChild(v2);
-      trialCard.appendChild(videosDiv);
-      // Toggle expand/collapse
-      trialCard.addEventListener('click', function(e) {
-        if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
-        var vids = this.querySelector('.trial-videos');
-        var arr = this.querySelector('#trialArrow svg');
-        if (vids.style.display === 'none') {
-          vids.style.display = '';
-          arr.style.transform = 'rotate(180deg)';
-        } else {
-          vids.style.display = 'none';
-          arr.style.transform = '';
-        }
-      });
+      trialCard.innerHTML =
+        '<div class="card-icon">' +
+          '<svg><use href="#icon-play"/></svg>' +
+        '</div>' +
+        '<div class="card-body">' +
+          '<div class="card-title">免费试学</div>' +
+          '<div class="card-desc">2 个试听视频</div>' +
+        '</div>' +
+        '<div class="card-arrow">' +
+          '<svg><use href="#icon-chevron-right"/></svg>' +
+        '</div>';
       subjectGrid.appendChild(trialCard);
     }
 
