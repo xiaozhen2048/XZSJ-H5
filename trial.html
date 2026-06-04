@@ -36,7 +36,10 @@
   <svg width="22" height="22" style="flex-shrink:0;color:#fff;">
     <use href="#icon-play"/>
   </svg>
-  <div class="title" style="color:#fff;">免费试学</div>
+  <div class="title" style="color:#fff;flex:1;">免费试学</div>
+  <button id="themeToggle" title="切换皮肤" style="background:rgba(255,255,255,0.2);border:none;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
+    <svg id="themeIcon" width="20" height="20" style="color:#fff;"><use href="#icon-sun"/></svg>
+  </button>
 </div>
 
 <!-- Page Content -->
@@ -98,6 +101,19 @@
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/app.js"></script>
+
+<script>
+window.updateThemeIcon = function() {
+  var icon = document.getElementById('themeIcon');
+  if (!icon) return;
+  var use = icon.querySelector('use');
+  var t = Theme.current();
+  if (t === 'dark') use.setAttribute('href', '#icon-moon');
+  else if (t === 'light') use.setAttribute('href', '#icon-sun');
+  else use.setAttribute('href', '#icon-sun');
+};
+updateThemeIcon();
+</script>
 
 </body>
 </html>

@@ -178,7 +178,10 @@
   <svg id="pageIcon" width="22" height="22" style="flex-shrink:0;display:none;">
     <use id="pageIconUse" href="#icon-mic"/>
   </svg>
-  <div class="title" id="pageTitle">课程</div>
+  <div class="title" id="pageTitle" style="flex:1;">课程</div>
+  <button id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
+    <svg id="themeIcon" width="22" height="22"><use href="#icon-sun"/></svg>
+  </button>
 </div>
 
 <!-- Page Content -->
@@ -559,6 +562,17 @@
   // Auth guard is handled by App.init() on DOMContentLoaded.
   // Load courses immediately; auth redirect (if needed) wins the race.
   loadCourses();
+
+  window.updateThemeIcon = function() {
+    var icon = document.getElementById('themeIcon');
+    if (!icon) return;
+    var use = icon.querySelector('use');
+    var t = Theme.current();
+    if (t === 'dark') use.setAttribute('href', '#icon-moon');
+    else if (t === 'light') use.setAttribute('href', '#icon-sun');
+    else use.setAttribute('href', '#icon-sun');
+  };
+  updateThemeIcon();
 
 })();
 </script>

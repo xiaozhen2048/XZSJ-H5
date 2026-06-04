@@ -231,7 +231,18 @@ ol {
   background: var(--gradient-header);
   color: #FFFFFF;
   padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-bar > div:first-child {
+  flex: 1;
   text-align: center;
+}
+
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.15) !important;
 }
 
 .header-bar .brand {

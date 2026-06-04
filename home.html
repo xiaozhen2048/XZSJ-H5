@@ -172,8 +172,13 @@
 
 <!-- Header Bar -->
 <div class="header-bar">
-  <div class="brand">小镇刷题家</div>
-  <div class="tagline">江苏专用 · 数资判系统课程</div>
+  <div>
+    <div class="brand">小镇刷题家</div>
+    <div class="tagline">江苏专用 · 数资判系统课程</div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);transition:background var(--transition-fast);" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
+    <svg id="themeIcon" width="22" height="22"><use href="#icon-sun"/></svg>
+  </button>
 </div>
 
 <!-- Preview Banner -->
@@ -441,6 +446,18 @@
   // Auth guard is handled by App.init() which runs on DOMContentLoaded.
   // We load data immediately; the auth redirect (if needed) will win the race.
   loadCourses();
+
+  // Theme toggle icon
+  window.updateThemeIcon = function() {
+    var icon = document.getElementById('themeIcon');
+    if (!icon) return;
+    var use = icon.querySelector('use');
+    var t = Theme.current();
+    if (t === 'dark') use.setAttribute('href', '#icon-moon');
+    else if (t === 'light') use.setAttribute('href', '#icon-sun');
+    else use.setAttribute('href', '#icon-sun');
+  };
+  updateThemeIcon();
 
 })();
 </script>
