@@ -429,7 +429,7 @@
       }
 
       return '<div class="course-card">' +
-        '<div class="course-header" onclick="event.stopPropagation();this.parentElement.classList.toggle(\'expanded\')">' +
+        '<div class="course-header">' +
           '<div class="course-icon">' +
             '<svg><use href="#icon-play"/></svg>' +
           '</div>' +
@@ -466,10 +466,6 @@
       // Group header
       var groupHeader = document.createElement('div');
       groupHeader.className = 'course-header';
-      groupHeader.addEventListener('click', function(e) {
-        e.stopPropagation();
-        this.parentElement.classList.toggle('expanded');
-      });
 
       var groupIcon = (groupName === '理论母题') ? 'icon-book' : 'icon-edit';
       groupHeader.innerHTML =
@@ -534,6 +530,21 @@
         showError(err.message || '加载失败，请返回重试');
       });
   }
+
+  // -----------------------------------------------------------------------
+  // Event delegation: handle all expand/collapse clicks
+  // -----------------------------------------------------------------------
+  courseList.addEventListener('click', function (e) {
+    var header = e.target.closest('.course-header');
+    if (!header) return;
+    // Don't toggle if clicking a video capsule or password badge
+    if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
+    e.stopPropagation();
+    var card = header.parentElement;
+    if (card && card.classList.contains('course-card')) {
+      card.classList.toggle('expanded');
+    }
+  });
 
   // -----------------------------------------------------------------------
   // Retry button
