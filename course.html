@@ -470,6 +470,15 @@
           '</div>';
         fCard.appendChild(fHeader);
 
+        // Direct click handler — no delegation
+        (function(card) {
+          fHeader.addEventListener('click', function(e) {
+            if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
+            e.stopPropagation();
+            card.classList.toggle('expanded');
+          });
+        })(fCard);
+
         var fVideos = fc.videos || [];
         if (fVideos.length > 0) {
           var fVcaps = document.createElement('div');
@@ -554,6 +563,15 @@
           '</div>';
 
         courseCard.appendChild(courseHeader);
+
+        // DIRECT click handler on course header — no delegation needed
+        (function(card) {
+          courseHeader.addEventListener('click', function(e) {
+            if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
+            e.stopPropagation();
+            card.classList.toggle('expanded');
+          });
+        })(courseCard);
 
         // Video capsules
         var videos = course.videos || [];
