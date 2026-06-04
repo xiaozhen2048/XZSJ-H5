@@ -429,7 +429,7 @@
       }
 
       return '<div class="course-card">' +
-        '<div class="course-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+        '<div class="course-header" onclick="event.stopPropagation();this.parentElement.classList.toggle(\'expanded\')">' +
           '<div class="course-icon">' +
             '<svg><use href="#icon-play"/></svg>' +
           '</div>' +
@@ -466,7 +466,8 @@
       // Group header
       var groupHeader = document.createElement('div');
       groupHeader.className = 'course-header';
-      groupHeader.addEventListener('click', function() {
+      groupHeader.addEventListener('click', function(e) {
+        e.stopPropagation();
         this.parentElement.classList.toggle('expanded');
       });
 
