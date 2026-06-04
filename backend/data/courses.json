@@ -611,66 +611,105 @@
           "id": "dy-01",
           "title": "第一次答疑（数量核心考点再强化梳理）",
           "tag": "",
+          "order": 0,
           "videos": [
             {
               "label": "录制文件",
-              "url": "https://meeting.tencent.com/crm/Nx9B10W9a",
-              "password": ""
+              "url": "https://meeting.tencent.com/crm/Nx9B10W9a6",
+              "password": "1234"
             }
-          ],
-          "order": 0
+          ]
         },
         {
           "id": "dy-02",
+          "title": "第二次答疑（资料真题高频易错题梳理）",
+          "tag": "",
+          "order": 1,
+          "videos": [
+            {
+              "label": "录制文件",
+              "url": "https://meeting.tencent.com/crm/KE4WYjOD62",
+              "password": "1234"
+            }
+          ]
+        },
+        {
+          "id": "dy-03",
+          "title": "第三次答疑（推理题理论补充）",
+          "tag": "",
+          "order": 2,
+          "videos": [
+            {
+              "label": "录制文件",
+              "url": "https://meeting.tencent.com/crm/NLn39w1nf0",
+              "password": "1234"
+            }
+          ]
+        },
+        {
+          "id": "dy-04",
+          "title": "第四次答疑（如何高效备考）",
+          "tag": "",
+          "order": 3,
+          "videos": [
+            {
+              "label": "录制文件",
+              "url": "https://meeting.tencent.com/crm/No9Q71Rb83",
+              "password": "1234"
+            }
+          ]
+        },
+        {
+          "id": "dy-05",
           "title": "第五次答疑（资料、判断）",
           "tag": "",
+          "order": 4,
           "videos": [
             {
               "label": "录制文件",
               "url": "https://meeting.tencent.com/crm/23boPALb7b",
               "password": "1234"
             }
-          ],
-          "order": 1
+          ]
         },
         {
-          "id": "dy-03",
+          "id": "dy-06",
           "title": "第六次答疑（13条题目解答）",
           "tag": "",
+          "order": 5,
           "videos": [
             {
               "label": "录制文件",
               "url": "https://meeting.tencent.com/crm/l7wQYkR97e",
               "password": "1234"
             }
-          ],
-          "order": 2
+          ]
         },
         {
-          "id": "dy-04",
+          "id": "dy-07",
           "title": "第七次答疑（10来个题目）",
           "tag": "",
+          "order": 6,
           "videos": [
             {
               "label": "录制文件",
               "url": "https://meeting.tencent.com/crm/KzqOPwYX03",
               "password": "1234"
             }
-          ],
-          "order": 3
+          ]
         },
         {
-          "id": "dy-05",
+          "id": "dy-08",
           "title": "第八场（考前规划）",
           "tag": "",
+          "order": 7,
           "videos": [
             {
               "label": "录制文件",
               "url": "https://meeting.tencent.com/crm/l7wx3LGE8f",
               "password": "1234"
             }
-          ],
-          "order": 4
+          ]
         }
       ]
     },
