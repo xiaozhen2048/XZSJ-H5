@@ -363,6 +363,24 @@
               "order": 1
             },
             {
+              "id": "zl-11",
+              "title": "套题3（资7）",
+              "tag": "必学",
+              "order": 2,
+              "videos": [
+                {
+                  "label": "录制文件1",
+                  "url": "https://meeting.tencent.com/crm/2rYA4XWq58",
+                  "password": "1234"
+                },
+                {
+                  "label": "录制文件2",
+                  "url": "https://meeting.tencent.com/crm/2BB15xw4de",
+                  "password": "1234"
+                }
+              ]
+            },
+            {
               "id": "zl-06",
               "title": "套题4（资8）",
               "tag": "必学",
@@ -373,7 +391,7 @@
                   "password": "1234"
                 }
               ],
-              "order": 2
+              "order": 3
             },
             {
               "id": "zl-07",
@@ -386,7 +404,7 @@
                   "password": "1234"
                 }
               ],
-              "order": 3
+              "order": 4
             },
             {
               "id": "zl-08",
@@ -399,7 +417,7 @@
                   "password": "1234"
                 }
               ],
-              "order": 4
+              "order": 5
             }
           ]
         }
