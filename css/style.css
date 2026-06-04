@@ -539,17 +539,6 @@ ol {
 }
 
 /* Course cards nested inside a group card */
-.group-courses {
-  display: none;
-  flex-direction: column;
-  gap: var(--space-sm);
-  padding: 0 var(--space-md) var(--space-md);
-}
-
-.course-card.expanded .group-courses {
-  display: flex;
-}
-
 .group-courses > .course-card {
   margin-left: var(--space-xl);
   border-left: 3px solid var(--color-border) !important;
@@ -621,12 +610,20 @@ ol {
   padding: 0 var(--space-lg) var(--space-lg);
 }
 
-.course-card:not(.expanded) > .video-capsules {
-  display: none;
+.course-card.expanded > .video-capsules {
+  display: flex !important;
 }
 
-.course-card.expanded > .video-capsules {
-  display: flex;
+/* Group courses container: hidden by default, shown when parent group card is expanded */
+.group-courses {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md) var(--space-md);
+}
+
+.course-card.expanded > .group-courses {
+  display: flex !important;
 }
 
 
