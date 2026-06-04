@@ -209,7 +209,7 @@
 
   <!-- Quick Actions Row -->
   <div class="quick-actions">
-    <a href="downloads.html" class="quick-action">
+    <a href="javascript:void(0)" class="quick-action" onclick="Auth.isPreview()?App.toast('激活后可下载讲义'):location.href='downloads.html'">
       <svg><use href="#icon-download"/></svg>
       <span class="quick-action-label">讲义下载</span>
     </a>
