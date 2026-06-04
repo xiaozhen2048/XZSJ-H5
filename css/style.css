@@ -518,47 +518,62 @@ ol {
 }
 
 .group-card .course-header .course-title {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
 }
+.group-card .course-header .course-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
 
 /* Course cards nested inside a group card */
-.group-card > .video-capsules {
+.group-courses {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-sm);
   padding: 0 var(--space-md) var(--space-md);
 }
 
-.group-card > .video-capsules > .course-card {
-  margin-left: var(--space-2xl);
-  margin-bottom: var(--space-sm);
-  border-left: 3px solid var(--color-border) !important;
-  box-shadow: none;
-  border-radius: var(--radius-sm) var(--radius-sm) var(--radius-sm) 0;
+.course-card.expanded .group-courses {
+  display: flex;
 }
 
-.group-card > .video-capsules > .course-card .course-header {
+.group-courses > .course-card {
+  margin-left: var(--space-xl);
+  border-left: 3px solid var(--color-border) !important;
+  box-shadow: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.group-courses > .course-card:last-child {
+  margin-bottom: 0;
+}
+
+.group-courses > .course-card .course-header {
   padding: var(--space-sm) var(--space-md);
 }
 
-.group-card > .video-capsules > .course-card .course-header .course-icon {
+.group-courses > .course-card .course-header .course-icon {
   width: 32px;
   height: 32px;
   background: var(--color-bg);
 }
 
-.group-card > .video-capsules > .course-card .course-header .course-icon svg {
+.group-courses > .course-card .course-header .course-icon svg {
   fill: var(--color-primary-dark);
   width: 16px;
   height: 16px;
 }
 
-.group-card > .video-capsules > .course-card .course-header .course-title {
+.group-courses > .course-card .course-header .course-title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text);
+  color: var(--color-text-secondary);
 }
 
-.group-card > .video-capsules > .course-card .course-header .expand-icon svg {
+.group-courses > .course-card .course-header .expand-icon svg {
   width: 20px;
   height: 20px;
 }

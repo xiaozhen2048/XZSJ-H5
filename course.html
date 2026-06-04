@@ -486,8 +486,7 @@
 
       // Course list inside group (hidden when collapsed)
       var courseListInner = document.createElement('div');
-      courseListInner.className = 'video-capsules';
-      courseListInner.style.padding = '0';
+      courseListInner.className = 'video-capsules group-courses';
       for (var c = 0; c < groupCourses.length; c++) {
         courseListInner.insertAdjacentHTML('beforeend', buildCourseCard(groupCourses[c]));
       }
