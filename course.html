@@ -470,12 +470,18 @@
           '</div>';
         fCard.appendChild(fHeader);
 
-        // Direct click handler — no delegation
+        // Direct click handler
         (function(card) {
           fHeader.addEventListener('click', function(e) {
             if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
             e.stopPropagation();
-            card.classList.toggle('expanded');
+            var vc = card.querySelector(':scope > .video-capsules');
+            if (vc) {
+              var isHidden = vc.style.display === 'none' || getComputedStyle(vc).display === 'none';
+              vc.style.display = isHidden ? 'flex' : 'none';
+              var arrow = card.querySelector(':scope > .course-header .expand-icon');
+              if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
+            }
           });
         })(fCard);
 
@@ -483,6 +489,7 @@
         if (fVideos.length > 0) {
           var fVcaps = document.createElement('div');
           fVcaps.className = 'video-capsules';
+          fVcaps.style.display = 'none';
           for (var v = 0; v < fVideos.length; v++) {
             var fv = fVideos[v];
             var fCap = document.createElement('div');
@@ -540,6 +547,17 @@
       // Course list inside group (hidden when collapsed)
       var courseListInner = document.createElement('div');
       courseListInner.className = 'video-capsules group-courses';
+      courseListInner.style.display = 'none';
+
+      // Group header click: toggle inner courses
+      (function(inner, arrow) {
+        groupHeader.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isHidden = inner.style.display === 'none';
+          inner.style.display = isHidden ? 'flex' : 'none';
+          arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
+        });
+      })(courseListInner, groupHeader.querySelector('.expand-icon'));
 
       // Build nested course cards using DOM (same approach as group cards)
       for (var c = 0; c < groupCourses.length; c++) {
@@ -564,12 +582,18 @@
 
         courseCard.appendChild(courseHeader);
 
-        // DIRECT click handler on course header — no delegation needed
+        // DIRECT click handler: toggle video-capsules display directly
         (function(card) {
           courseHeader.addEventListener('click', function(e) {
             if (e.target.closest('.video-capsule') || e.target.closest('.password-badge')) return;
             e.stopPropagation();
-            card.classList.toggle('expanded');
+            var vc = card.querySelector(':scope > .video-capsules');
+            if (vc) {
+              var isHidden = vc.style.display === 'none' || getComputedStyle(vc).display === 'none';
+              vc.style.display = isHidden ? 'flex' : 'none';
+              var arrow = card.querySelector(':scope > .course-header .expand-icon');
+              if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
+            }
           });
         })(courseCard);
 
@@ -578,6 +602,7 @@
         if (videos.length > 0) {
           var vcaps = document.createElement('div');
           vcaps.className = 'video-capsules';
+          vcaps.style.display = 'none';
 
           for (var v = 0; v < videos.length; v++) {
             var video = videos[v];
