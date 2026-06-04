@@ -240,6 +240,18 @@
           "name": "理论母题",
           "courses": [
             {
+              "id": "zl-10",
+              "title": "资料分析 课时1 结构阅读法 讲义1 已更新 28分钟 必听",
+              "tag": "必学",
+              "videos": [
+                {
+                  "label": "录制文件",
+                  "url": "https://meeting.tencent.com/crm/2qxOgZ0Oc9",
+                  "password": "1234"
+                }
+              ]
+            },
+            {
               "id": "zl-01",
               "title": "资料考点-理论+母题（资1）",
               "tag": "必学",
