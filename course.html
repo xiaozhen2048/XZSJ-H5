@@ -448,10 +448,53 @@
       '</div>';
     }
 
-    // If no groups, render flat course cards
+    // If no groups, render flat course cards using DOM
     if (groups.length === 0) {
       for (var c = 0; c < flatCourses.length; c++) {
-        courseList.insertAdjacentHTML('beforeend', buildCourseCard(flatCourses[c]));
+        var fc = flatCourses[c];
+        var fCard = document.createElement('div');
+        fCard.className = 'course-card';
+
+        var fHeader = document.createElement('div');
+        fHeader.className = 'course-header';
+        fHeader.innerHTML =
+          '<div class="course-icon">' +
+            '<svg><use href="#icon-play"/></svg>' +
+          '</div>' +
+          '<div class="course-info">' +
+            '<div class="course-title">' + escapeHTML(fc.title || '未命名课程') + '</div>' +
+            (fc.tag ? '<div class="course-meta"><span class="' + (fc.tag === '必学' ? 'tag required' : 'tag') + '">' + escapeHTML(fc.tag) + '</span> ' + (fc.videos || []).length + '个视频</div>' : '') +
+          '</div>' +
+          '<div class="expand-icon">' +
+            '<svg><use href="#icon-chevron-down"/></svg>' +
+          '</div>';
+        fCard.appendChild(fHeader);
+
+        var fVideos = fc.videos || [];
+        if (fVideos.length > 0) {
+          var fVcaps = document.createElement('div');
+          fVcaps.className = 'video-capsules';
+          for (var v = 0; v < fVideos.length; v++) {
+            var fv = fVideos[v];
+            var fCap = document.createElement('div');
+            fCap.className = 'video-capsule';
+            fCap.addEventListener('click', function(ev) {
+              ev.stopPropagation();
+              var vd = this._videoData;
+              if (Auth.isPreview()) { App.toast('预览模式，激活后可观看'); return; }
+              if (!vd.url) { App.toast('链接暂未上传'); return; }
+              App.openVideo(vd.url, vd.password);
+            });
+            fCap._videoData = { url: fv.url || '', password: fv.password || '' };
+            fCap.innerHTML =
+              '<div class="play-icon"><svg><use href="#icon-play"/></svg></div>' +
+              '<div class="video-label">' + escapeHTML(fv.label || ('视频 ' + (v + 1))) + '</div>' +
+              (fv.password && !Auth.isPreview() ? '<div class="password-badge"><svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>' + escapeHTML(fv.password) + '</div>' : '');
+            fVcaps.appendChild(fCap);
+          }
+          fCard.appendChild(fVcaps);
+        }
+        courseList.appendChild(fCard);
       }
       return;
     }
@@ -488,8 +531,77 @@
       // Course list inside group (hidden when collapsed)
       var courseListInner = document.createElement('div');
       courseListInner.className = 'video-capsules group-courses';
+
+      // Build nested course cards using DOM (same approach as group cards)
       for (var c = 0; c < groupCourses.length; c++) {
-        courseListInner.insertAdjacentHTML('beforeend', buildCourseCard(groupCourses[c]));
+        var course = groupCourses[c];
+        var courseCard = document.createElement('div');
+        courseCard.className = 'course-card';
+
+        // Course header
+        var courseHeader = document.createElement('div');
+        courseHeader.className = 'course-header';
+        courseHeader.innerHTML =
+          '<div class="course-icon">' +
+            '<svg><use href="#icon-play"/></svg>' +
+          '</div>' +
+          '<div class="course-info">' +
+            '<div class="course-title">' + escapeHTML(course.title || '未命名课程') + '</div>' +
+            (course.tag ? '<div class="course-meta"><span class="' + (course.tag === '必学' ? 'tag required' : 'tag') + '">' + escapeHTML(course.tag) + '</span> ' + (course.videos || []).length + '个视频</div>' : '') +
+          '</div>' +
+          '<div class="expand-icon">' +
+            '<svg><use href="#icon-chevron-down"/></svg>' +
+          '</div>';
+
+        courseCard.appendChild(courseHeader);
+
+        // Video capsules
+        var videos = course.videos || [];
+        if (videos.length > 0) {
+          var vcaps = document.createElement('div');
+          vcaps.className = 'video-capsules';
+
+          for (var v = 0; v < videos.length; v++) {
+            var video = videos[v];
+            var capsule = document.createElement('div');
+            capsule.className = 'video-capsule';
+            capsule.addEventListener('click', function(ev) {
+              ev.stopPropagation();
+              var vd = this._videoData;
+              if (Auth.isPreview()) { App.toast('预览模式，激活后可观看'); return; }
+              if (!vd.url) { App.toast('链接暂未上传'); return; }
+              App.openVideo(vd.url, vd.password);
+            });
+            capsule._videoData = { url: video.url || '', password: video.password || '' };
+
+            var playIcon = document.createElement('div');
+            playIcon.className = 'play-icon';
+            playIcon.innerHTML = '<svg><use href="#icon-play"/></svg>';
+            capsule.appendChild(playIcon);
+
+            var label = document.createElement('div');
+            label.className = 'video-label';
+            label.textContent = video.label || ('视频 ' + (v + 1));
+            capsule.appendChild(label);
+
+            if (video.password && !Auth.isPreview()) {
+              var badge = document.createElement('div');
+              badge.className = 'password-badge';
+              badge.addEventListener('click', function(ev) {
+                ev.stopPropagation();
+                App.copy(this._pwd);
+              });
+              badge._pwd = video.password;
+              badge.innerHTML = '<svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>' + escapeHTML(video.password);
+              capsule.appendChild(badge);
+            }
+
+            vcaps.appendChild(capsule);
+          }
+          courseCard.appendChild(vcaps);
+        }
+
+        courseListInner.appendChild(courseCard);
       }
       groupCard.appendChild(courseListInner);
 
