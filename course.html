@@ -461,12 +461,10 @@
       // Build group section (expandable card)
       var groupCard = document.createElement('div');
       groupCard.className = 'course-card group-card';
-      groupCard.style.borderLeft = '4px solid var(--color-primary)';
 
       // Group header
       var groupHeader = document.createElement('div');
       groupHeader.className = 'course-header';
-      groupHeader.style.cssText = 'cursor:pointer;';
       groupHeader.addEventListener('click', function() {
         this.parentElement.classList.toggle('expanded');
       });
