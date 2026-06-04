@@ -89,22 +89,32 @@ const App = {
     Theme.init();
     var page = window.location.pathname.split('/').pop();
 
-    // Pages that are always accessible (no auth needed):
-    var publicPages = ['index.html', '', 'admin.html', 'admin', 'trial.html', 'trial', 'home.html'];
+    // Pages that allow preview (show content but limited):
+    //   home.html, course.html, trial.html
+    // Pages that require FULL activation:
+    //   downloads.html, method.html, profile.html, admin
 
-    if (page && publicPages.indexOf(page) === -1) {
-      // These pages require FULL activation (preview is NOT enough):
-      //   course.html, downloads.html, method.html, profile.html
-      if (!Auth.isActivated()) {
-        // Preview users get redirected to trial page
-        if (Auth.isPreview()) {
-          App.toast('预览模式下无法查看，请先激活');
-          setTimeout(function() { window.location.href = 'trial.html'; }, 1000);
-        } else {
-          window.location.href = 'index.html';
+    if (page && page !== 'index.html' && page !== '') {
+      // Admin: has own auth
+      if (page === 'admin.html' || page === 'admin') return;
+
+      // Fully restricted: require activation (preview not enough)
+      var restrictedPages = ['downloads.html', 'downloads', 'method.html', 'method', 'profile.html', 'profile'];
+      if (restrictedPages.indexOf(page) !== -1) {
+        if (!Auth.isActivated()) {
+          if (Auth.isPreview()) {
+            App.toast('预览模式下无法访问，请先激活');
+            setTimeout(function() { window.location.href = 'trial.html'; }, 1000);
+          } else {
+            window.location.href = 'index.html';
+          }
+          return false;
         }
-        return false;
       }
+
+      // Course page: preview OK, but content limited by course.html itself
+      // Home page: preview OK (already shows preview banner)
+      // Trial page: always OK
     }
   }
 };

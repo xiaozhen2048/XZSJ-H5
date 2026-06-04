@@ -456,17 +456,7 @@
 
       var card = document.createElement('a');
       card.className = 'subject-card';
-
-      // Preview mode: redirect to trial instead of course page
-      if (Auth.isPreview()) {
-        card.href = 'javascript:void(0)';
-        card.addEventListener('click', function(e) {
-          e.preventDefault();
-          App.toast('预览模式，激活后可查看完整课程');
-        });
-      } else {
-        card.href = 'course.html?cat=' + encodeURIComponent(courseId);
-      }
+      card.href = 'course.html?cat=' + encodeURIComponent(courseId);
 
       // Custom accent border color (mobile: left, tablet+: top)
       card.style.borderLeftColor = color;
