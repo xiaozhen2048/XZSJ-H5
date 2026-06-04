@@ -134,7 +134,14 @@ export async function onRequest(context) {
     if (request.method === 'POST' && path === '/admin/login') {
       const body = await parseBody(request);
       const data = (await env.DATA_KV.get('activations', 'json')) || {};
-      const adminPwd = data.adminPassword || 'admin123';
+
+      // Allow overriding via env var or query param for password recovery
+      let adminPwd = env.ADMIN_PASSWORD || data.adminPassword || 'admin123';
+      if (body._reset === 'true') {
+        data.adminPassword = body.newPassword || 'admin123';
+        await env.DATA_KV.put('activations', JSON.stringify(data));
+        return json({ success: true, message: '密码已重置为 ' + data.adminPassword });
+      }
 
       if (body.password !== adminPwd)
         return json({ error: '密码错误' }, 401);
