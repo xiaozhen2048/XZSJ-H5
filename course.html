@@ -470,9 +470,10 @@
         this.parentElement.classList.toggle('expanded');
       });
 
+      var groupIcon = (groupName === '理论母题') ? 'icon-book' : 'icon-edit';
       groupHeader.innerHTML =
-        '<div class="course-icon" style="background:var(--color-primary-light);">' +
-          '<svg><use href="#icon-play"/></svg>' +
+        '<div class="course-icon" style="background:var(--color-primary);">' +
+          '<svg><use href="#' + groupIcon + '"/></svg>' +
         '</div>' +
         '<div class="course-info">' +
           '<div class="course-title">' + escapeHTML(groupName) + '</div>' +

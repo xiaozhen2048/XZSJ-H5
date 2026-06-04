@@ -610,11 +610,11 @@ ol {
   padding: 0 var(--space-lg) var(--space-lg);
 }
 
-.course-card:not(.expanded) .video-capsules {
+.course-card:not(.expanded) > .video-capsules {
   display: none;
 }
 
-.course-card.expanded .video-capsules {
+.course-card.expanded > .video-capsules {
   display: flex;
 }
 
