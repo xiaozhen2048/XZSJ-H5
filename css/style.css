@@ -604,7 +604,7 @@ ol {
 
 /* ---- 8. Video Capsules (container) ---- */
 .video-capsules {
-  display: none;
+  display: none !important;
   flex-direction: column;
   gap: var(--space-sm);
   padding: 0 var(--space-lg) var(--space-lg);
@@ -616,7 +616,7 @@ ol {
 
 /* Group courses container: hidden by default, shown when parent group card is expanded */
 .group-courses {
-  display: none;
+  display: none !important;
   flex-direction: column;
   gap: var(--space-sm);
   padding: 0 var(--space-md) var(--space-md);
