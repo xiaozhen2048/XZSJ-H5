@@ -41,8 +41,8 @@ const API = {
   },
 
   // Admin: save (create or update) a course
-  adminSaveCourse(course) {
-    return this.request('POST', '/api/admin/courses/save', { course });
+  adminSaveCourse(course, groupName) {
+    return this.request('POST', '/api/admin/courses/save', { course, groupName: groupName || course.groupName || '' });
   },
 
   // Admin: delete a course by id

@@ -337,7 +337,15 @@
     hideSkeleton();
 
     var catName = category.name || category.title || '课程';
-    var courses = category.courses || [];
+
+    // Support both new groups[] and old courses[] format
+    var groups = category.groups || [];
+    var flatCourses = category.courses || [];
+
+    // If no groups, wrap flat courses in a single group
+    if (groups.length === 0 && flatCourses.length > 0) {
+      groups = [{ name: '', courses: flatCourses }];
+    }
 
     // Update page header
     pageTitle.textContent = catName;
@@ -345,8 +353,12 @@
     pageIconUse.setAttribute('href', '#' + headerIcon);
     pageIcon.style.display = '';
 
-    // Check for empty courses
-    if (!courses.length || courses.length === 0) {
+    // Total course count
+    var totalCourses = 0;
+    for (var g = 0; g < groups.length; g++) {
+      totalCourses += (groups[g].courses || []).length;
+    }
+    if (totalCourses === 0) {
       showEmpty();
       return;
     }
@@ -354,15 +366,26 @@
     courseList.style.display = '';
     courseList.innerHTML = '';
 
-    for (var i = 0; i < courses.length; i++) {
-      var course = courses[i];
+    // Build group header HTML
+    function buildGroupHeader(name, count) {
+      if (!name) return '';
+      return '<div style="display:flex;align-items:center;gap:var(--space-sm);' +
+        'padding:var(--space-lg) 0 var(--space-sm) 0;margin-top:var(--space-sm);">' +
+        '<span style="font-size:var(--font-size-sm);font-weight:var(--font-weight-semibold);' +
+        'color:var(--color-text);">' + escapeHTML(name) + '</span>' +
+        '<span style="font-size:var(--font-size-xs);color:var(--color-text-muted);">' +
+        count + '门课</span>' +
+        '</div>';
+    }
+
+    // Build course card HTML
+    function buildCourseCard(course) {
       var courseTitle = course.title || course.name || '未命名课程';
       var courseTag = course.tag || '';
       var tagClass = (courseTag === '必学') ? 'tag required' : 'tag';
       var videos = course.videos || [];
       var videoCount = videos.length;
 
-      // Build course header HTML
       var tagHTML = '';
       if (courseTag) {
         tagHTML = '<span class="' + tagClass + '">' + escapeHTML(courseTag) + '</span>';
@@ -370,17 +393,10 @@
 
       var metaHTML = '';
       var metaParts = [];
-      if (courseTag) {
-        metaParts.push(tagHTML);
-      }
-      if (videoCount > 0) {
-        metaParts.push(videoCount + '个视频');
-      }
-      if (metaParts.length > 0) {
-        metaHTML = metaParts.join(' ');
-      }
+      if (courseTag) metaParts.push(tagHTML);
+      if (videoCount > 0) metaParts.push(videoCount + '个视频');
+      if (metaParts.length > 0) metaHTML = metaParts.join(' ');
 
-      // Build video capsules HTML
       var videosHTML = '';
       if (videoCount > 0) {
         for (var v = 0; v < videos.length; v++) {
@@ -390,7 +406,6 @@
           var vPassword = video.password || video.pwd || '';
           var isPreview = Auth.isPreview();
 
-          // Build onclick for capsule body
           var capsuleOnClick = '';
           if (isPreview) {
             capsuleOnClick = "App.toast('预览模式，激活后可观看')";
@@ -425,25 +440,35 @@
         }
       }
 
-      // Build full course card HTML
-      var cardHTML =
-        '<div class="course-card">' +
-          '<div class="course-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
-            '<div class="course-icon">' +
-              '<svg><use href="#icon-play"/></svg>' +
-            '</div>' +
-            '<div class="course-info">' +
-              '<div class="course-title">' + escapeHTML(courseTitle) + '</div>' +
-              (metaHTML ? '<div class="course-meta">' + metaHTML + '</div>' : '') +
-            '</div>' +
-            '<div class="expand-icon">' +
-              '<svg><use href="#icon-chevron-down"/></svg>' +
-            '</div>' +
+      return '<div class="course-card">' +
+        '<div class="course-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+          '<div class="course-icon">' +
+            '<svg><use href="#icon-play"/></svg>' +
           '</div>' +
-          (videosHTML ? '<div class="video-capsules">' + videosHTML + '</div>' : '') +
-        '</div>';
+          '<div class="course-info">' +
+            '<div class="course-title">' + escapeHTML(courseTitle) + '</div>' +
+            (metaHTML ? '<div class="course-meta">' + metaHTML + '</div>' : '') +
+          '</div>' +
+          '<div class="expand-icon">' +
+            '<svg><use href="#icon-chevron-down"/></svg>' +
+          '</div>' +
+        '</div>' +
+        (videosHTML ? '<div class="video-capsules">' + videosHTML + '</div>' : '') +
+      '</div>';
+    }
 
-      courseList.insertAdjacentHTML('beforeend', cardHTML);
+    // Render groups
+    for (var g = 0; g < groups.length; g++) {
+      var group = groups[g];
+      var groupCourses = group.courses || [];
+
+      if (group.name) {
+        courseList.insertAdjacentHTML('beforeend', buildGroupHeader(group.name, groupCourses.length));
+      }
+
+      for (var c = 0; c < groupCourses.length; c++) {
+        courseList.insertAdjacentHTML('beforeend', buildCourseCard(groupCourses[c]));
+      }
     }
   }
 

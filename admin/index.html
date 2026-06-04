@@ -326,6 +326,15 @@
     </div>
 
     <div class="form-group">
+      <label>分组</label>
+      <select id="modalGroup" class="form-input">
+        <option value="">无分组</option>
+        <option value="理论母题">理论母题</option>
+        <option value="强化刷题">强化刷题</option>
+      </select>
+    </div>
+
+    <div class="form-group">
       <label>课程标题</label>
       <input type="text" id="modalCourseTitle" class="form-input" placeholder="输入课程标题">
     </div>
@@ -525,6 +534,7 @@
       title: c.title || c.name || '未命名课程',
       category: c.category || c.cat || '',
       categoryId: c.categoryId || c.catId || c.category || c.cat || '',
+      groupName: c.groupName || '',
       tag: c.tag || '',
       videos: c.videos || [],
       order: c.order || c.sort || 0
@@ -575,12 +585,10 @@
   }
 
   /*
-   * Render the course management list.
+   * Render the course management list with group headers.
    */
   function renderCourseList() {
-    var grouped = groupCoursesByCategory(allCourses);
-
-    if (grouped.length === 0) {
+    if (allCourses.length === 0) {
       showCourseEmpty();
       return;
     }
@@ -588,66 +596,86 @@
     showCourseList();
     courseList.innerHTML = '';
 
-    for (var g = 0; g < grouped.length; g++) {
-      var group = grouped[g];
+    // Group by category first, then by groupName within each category
+    var catMap = {};
+    for (var i = 0; i < allCourses.length; i++) {
+      var crs = allCourses[i];
+      var cat = crs.category || '未分类';
+      if (!catMap[cat]) catMap[cat] = {};
+      var grp = crs.groupName || '';
+      if (!catMap[cat][grp]) catMap[cat][grp] = [];
+      catMap[cat][grp].push(crs);
+    }
+
+    var catKeys = Object.keys(catMap).sort();
+    for (var ci = 0; ci < catKeys.length; ci++) {
+      var catName = catKeys[ci];
+      var groupMap = catMap[catName];
 
       // Category header
       var catHeader = document.createElement('div');
-      catHeader.style.cssText = 'font-weight:var(--font-weight-semibold);font-size:var(--font-size-base);color:var(--color-text);padding:var(--space-md) 0;margin-top:var(--space-lg);border-bottom:1px solid var(--color-border);';
-      catHeader.textContent = group.category;
+      catHeader.style.cssText = 'font-weight:var(--font-weight-bold);font-size:var(--font-size-base);color:var(--color-text);padding:var(--space-lg) 0 var(--space-sm) 0;margin-top:var(--space-lg);border-bottom:2px solid var(--color-primary);';
+      catHeader.textContent = catName;
       courseList.appendChild(catHeader);
 
-      // Course rows
-      for (var c = 0; c < group.courses.length; c++) {
-        var course = group.courses[c];
-        var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-md) 0;border-bottom:1px solid var(--color-border);';
+      var groupKeys = Object.keys(groupMap).sort();
+      for (var gi = 0; gi < groupKeys.length; gi++) {
+        var groupName = groupKeys[gi];
+        var courses = groupMap[groupName];
 
-        // Title and tag
-        var infoDiv = document.createElement('div');
-        infoDiv.style.cssText = 'flex:1;min-width:0;display:flex;align-items:center;gap:var(--space-sm);';
-
-        var titleSpan = document.createElement('span');
-        titleSpan.style.cssText = 'font-size:var(--font-size-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
-        titleSpan.textContent = course.title;
-        infoDiv.appendChild(titleSpan);
-
-        if (course.tag) {
-          var tagSpan = document.createElement('span');
-          tagSpan.className = course.tag === '必学' ? 'tag required' : 'tag';
-          tagSpan.textContent = course.tag;
-          infoDiv.appendChild(tagSpan);
+        // Group sub-header
+        if (groupName) {
+          var grpHeader = document.createElement('div');
+          grpHeader.style.cssText = 'font-weight:var(--font-weight-medium);font-size:var(--font-size-sm);color:var(--color-text-secondary);padding:var(--space-sm) 0;margin-top:var(--space-sm);';
+          grpHeader.textContent = '▸ ' + groupName + ' (' + courses.length + '门)';
+          courseList.appendChild(grpHeader);
         }
 
-        row.appendChild(infoDiv);
+        // Course rows
+        for (var c = 0; c < courses.length; c++) {
+          var course = courses[c];
+          var row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-md) 0;border-bottom:1px solid var(--color-border);';
 
-        // Edit button
-        var editBtn = document.createElement('button');
-        editBtn.className = 'btn btn-outline btn-sm';
-        editBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
-        editBtn.innerHTML = '<svg width="14" height="14"><use href="#icon-edit"/></svg>';
-        editBtn.title = '编辑';
-        (function (crs) {
-          editBtn.addEventListener('click', function () {
-            openEditModal(crs);
-          });
-        })(course);
-        row.appendChild(editBtn);
+          var infoDiv = document.createElement('div');
+          infoDiv.style.cssText = 'flex:1;min-width:0;display:flex;align-items:center;gap:var(--space-sm);';
 
-        // Delete button
-        var deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn btn-danger btn-sm';
-        deleteBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
-        deleteBtn.innerHTML = '<svg width="14" height="14"><use href="#icon-trash"/></svg>';
-        deleteBtn.title = '删除';
-        (function (crs) {
-          deleteBtn.addEventListener('click', function () {
-            deleteCourse(crs);
-          });
-        })(course);
-        row.appendChild(deleteBtn);
+          var titleSpan = document.createElement('span');
+          titleSpan.style.cssText = 'font-size:var(--font-size-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+          titleSpan.textContent = course.title;
+          infoDiv.appendChild(titleSpan);
 
-        courseList.appendChild(row);
+          if (course.tag) {
+            var tagSpan = document.createElement('span');
+            tagSpan.className = course.tag === '必学' ? 'tag required' : 'tag';
+            tagSpan.textContent = course.tag;
+            infoDiv.appendChild(tagSpan);
+          }
+
+          row.appendChild(infoDiv);
+
+          var editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-outline btn-sm';
+          editBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
+          editBtn.innerHTML = '<svg width="14" height="14"><use href="#icon-edit"/></svg>';
+          editBtn.title = '编辑';
+          (function (crs) {
+            editBtn.addEventListener('click', function () { openEditModal(crs); });
+          })(course);
+          row.appendChild(editBtn);
+
+          var deleteBtn = document.createElement('button');
+          deleteBtn.className = 'btn btn-danger btn-sm';
+          deleteBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
+          deleteBtn.innerHTML = '<svg width="14" height="14"><use href="#icon-trash"/></svg>';
+          deleteBtn.title = '删除';
+          (function (crs) {
+            deleteBtn.addEventListener('click', function () { deleteCourse(crs); });
+          })(course);
+          row.appendChild(deleteBtn);
+
+          courseList.appendChild(row);
+        }
       }
     }
   }
@@ -667,15 +695,31 @@
         } else if (data && Array.isArray(data.courses)) {
           courses = data.courses;
         } else if (data && Array.isArray(data.categories)) {
-          // Flatten categories into courses
+          // Flatten categories (with groups or flat courses) into courses
           for (var i = 0; i < data.categories.length; i++) {
             var cat = data.categories[i];
             var catName = cat.name || cat.title || '';
-            var catCourses = cat.courses || [];
-            for (var j = 0; j < catCourses.length; j++) {
-              var crs = catCourses[j];
-              crs.category = crs.category || catName;
-              courses.push(crs);
+            // New grouped format
+            if (cat.groups && cat.groups.length > 0) {
+              for (var g = 0; g < cat.groups.length; g++) {
+                var group = cat.groups[g];
+                var groupName = group.name || '';
+                var groupCourses = group.courses || [];
+                for (var j = 0; j < groupCourses.length; j++) {
+                  var crs = groupCourses[j];
+                  crs.category = crs.category || catName;
+                  crs.groupName = crs.groupName || groupName;
+                  courses.push(crs);
+                }
+              }
+            } else {
+              // Old flat format
+              var flatCourses = cat.courses || [];
+              for (var k = 0; k < flatCourses.length; k++) {
+                var fc = flatCourses[k];
+                fc.category = fc.category || catName;
+                courses.push(fc);
+              }
             }
           }
         }
@@ -715,6 +759,7 @@
   var courseModal = document.getElementById('courseModal');
   var modalTitle = document.getElementById('modalTitle');
   var modalCategory = document.getElementById('modalCategory');
+  var modalGroup = document.getElementById('modalGroup');
   var modalCourseTitle = document.getElementById('modalCourseTitle');
   var modalTag = document.getElementById('modalTag');
   var modalVideos = document.getElementById('modalVideos');
@@ -793,6 +838,7 @@
     modalCourseTitle.value = '';
     modalTag.value = '';
     modalVideos.value = '';
+    modalGroup.value = '';
     populateCategoryDropdown('');
     courseModal.style.display = '';
   }
@@ -806,6 +852,7 @@
     modalCourseTitle.value = course.title || '';
     modalTag.value = course.tag || '';
     modalVideos.value = videosToText(course.videos);
+    modalGroup.value = course.groupName || '';
     populateCategoryDropdown(course.category || '');
     courseModal.style.display = '';
   }
@@ -849,8 +896,11 @@
     var tag = modalTag.value;
     var videos = textToVideos(modalVideos.value);
 
+    var groupName = modalGroup.value;
+
     var courseData = {
       category: category,
+      categoryId: category,
       title: title,
       tag: tag,
       videos: videos
@@ -859,12 +909,15 @@
     if (editingCourseId) {
       courseData.id = editingCourseId;
     }
+    if (groupName) {
+      courseData.groupName = groupName;
+    }
 
     modalSave.textContent = '保存中...';
     modalSave.disabled = true;
     modalCancel.disabled = true;
 
-    API.adminSaveCourse(courseData)
+    API.adminSaveCourse(courseData, groupName)
       .then(function () {
         App.toast(editingCourseId ? '课程已更新' : '课程已创建');
         closeModal();

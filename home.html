@@ -181,6 +181,30 @@
   当前为预览模式，激活后可查看完整内容
 </div>
 
+<!-- Trial Section (preview mode only) -->
+<div id="trialSection" style="display:none;margin:var(--space-lg) var(--space-lg) 0;">
+  <div class="section-title" style="display:flex;align-items:center;gap:var(--space-sm);">
+    <svg width="20" height="20" style="color:var(--color-primary);"><use href="#icon-play"/></svg>
+    免费试学
+  </div>
+  <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-top:var(--space-md);">
+    <div class="video-capsule" onclick="App.openVideo('https://meeting.tencent.com/crm/l7qJn9d9b2','1234')">
+      <div class="play-icon"><svg><use href="#icon-play"/></svg></div>
+      <div class="video-label">数量关系 · 和差倍-理论+母题（数2）录制文件1</div>
+      <div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">
+        <svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234
+      </div>
+    </div>
+    <div class="video-capsule" onclick="App.openVideo('https://meeting.tencent.com/crm/2ZnWajgp11','1234')">
+      <div class="play-icon"><svg><use href="#icon-play"/></svg></div>
+      <div class="video-label">判断推理 · 推理题补充刷题（判8）录制文件1</div>
+      <div class="password-badge" onclick="event.stopPropagation();App.copy('1234')">
+        <svg width="12" height="12" style="margin-right:2px;display:inline;vertical-align:middle;"><use href="#icon-copy"/></svg>1234
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Page Content -->
 <div class="page-content">
 
@@ -212,7 +236,7 @@
       <svg><use href="#icon-download"/></svg>
       <span class="quick-action-label">讲义下载</span>
     </a>
-    <a href="method.html" class="quick-action">
+    <a href="javascript:void(0)" class="quick-action" onclick="App.toast('还在完善中，敬请期待')">
       <svg><use href="#icon-book"/></svg>
       <span class="quick-action-label">学习方法</span>
     </a>
@@ -282,12 +306,14 @@
   var emptyState   = document.getElementById('emptyState');
   var retryBtn     = document.getElementById('retryBtn');
   var previewBanner = document.getElementById('previewBanner');
+  var trialSection  = document.getElementById('trialSection');
 
   // -----------------------------------------------------------------------
-  // Preview banner
+  // Preview banner + trial section
   // -----------------------------------------------------------------------
   if (Auth.isPreview()) {
     previewBanner.style.display = 'block';
+    trialSection.style.display = '';
   }
 
   // -----------------------------------------------------------------------
@@ -337,7 +363,14 @@
       var courseId   = cat.id || cat._id || '';
       var title      = cat.name || cat.title || '未命名';
       var desc       = cat.description || cat.desc || '';
-      var count      = (cat.courses || []).length || 0;
+      var count      = 0;
+      if (cat.groups && cat.groups.length > 0) {
+        for (var gi = 0; gi < cat.groups.length; gi++) {
+          count += (cat.groups[gi].courses || []).length;
+        }
+      } else {
+        count = (cat.courses || []).length || 0;
+      }
       var color      = cat.color || getPaletteColor(i);
       var iconName   = getCategoryIcon(title);
 

@@ -141,21 +141,35 @@ export async function onRequest(context) {
 
     // POST /api/admin/courses/save
     if (request.method === 'POST' && path === '/admin/courses/save') {
-      const { course } = await parseBody(request);
+      const { course, groupName } = await parseBody(request);
       if (!course || !course.id || !course.categoryId)
         return json({ error: '缺少课程信息' }, 400);
 
       const data = (await env.DATA_KV.get('courses', 'json')) || { categories: [] };
-      let cat = data.categories.find(c => c.id === course.categoryId);
+      // Match by id or display name
+      let cat = data.categories.find(c => c.id === course.categoryId || c.name === course.categoryId);
       if (!cat) {
-        cat = { id: course.categoryId, name: course.categoryId, courses: [] };
+        cat = { id: course.categoryId, name: course.categoryId, groups: [{ name: groupName || '默认', courses: [] }] };
         data.categories.push(cat);
       }
-      if (!cat.courses) cat.courses = [];
 
-      const idx = cat.courses.findIndex(c => c.id === course.id);
-      if (idx !== -1) cat.courses[idx] = course;
-      else cat.courses.push(course);
+      // Ensure groups array exists
+      if (!cat.groups) cat.groups = [];
+      if (cat.groups.length === 0) cat.groups.push({ name: groupName || '默认', courses: [] });
+
+      // Find or create target group
+      const targetName = groupName || cat.groups[0].name || '默认';
+      let group = cat.groups.find(g => g.name === targetName);
+      if (!group) {
+        group = { name: targetName, courses: [] };
+        cat.groups.push(group);
+      }
+      if (!group.courses) group.courses = [];
+
+      // Upsert course in group
+      const idx = group.courses.findIndex(c => c.id === course.id);
+      if (idx !== -1) group.courses[idx] = course;
+      else group.courses.push(course);
 
       await env.DATA_KV.put('courses', JSON.stringify(data));
       return json({ success: true });
@@ -168,6 +182,11 @@ export async function onRequest(context) {
 
       const data = (await env.DATA_KV.get('courses', 'json')) || { categories: [] };
       for (const cat of data.categories) {
+        if (cat.groups) {
+          for (const group of cat.groups) {
+            if (group.courses) group.courses = group.courses.filter(c => c.id !== id);
+          }
+        }
         if (cat.courses) cat.courses = cat.courses.filter(c => c.id !== id);
       }
       await env.DATA_KV.put('courses', JSON.stringify(data));
