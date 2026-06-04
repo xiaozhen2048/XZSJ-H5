@@ -63,5 +63,10 @@ const API = {
   // Admin: ban/unban a code
   adminBanCode(code) {
     return this.request('POST', '/api/admin/codes/ban', { code });
+  },
+
+  // Admin: reorder courses
+  adminReorderCourses(orders) {
+    return this.request('POST', '/api/admin/courses/reorder', { orders });
   }
 };

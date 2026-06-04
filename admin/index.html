@@ -607,6 +607,9 @@
       catMap[cat][grp].push(crs);
     }
 
+    // Sort courses within each group by order
+    function sortByOrder(a, b) { return (a.order || 0) - (b.order || 0); }
+
     var catKeys = Object.keys(catMap).sort();
     for (var ci = 0; ci < catKeys.length; ci++) {
       var catName = catKeys[ci];
@@ -621,21 +624,39 @@
       var groupKeys = Object.keys(groupMap).sort();
       for (var gi = 0; gi < groupKeys.length; gi++) {
         var groupName = groupKeys[gi];
-        var courses = groupMap[groupName];
+        var courses = groupMap[groupName].sort(sortByOrder);
 
-        // Group sub-header
-        if (groupName) {
-          var grpHeader = document.createElement('div');
-          grpHeader.style.cssText = 'font-weight:var(--font-weight-medium);font-size:var(--font-size-sm);color:var(--color-text-secondary);padding:var(--space-sm) 0;margin-top:var(--space-sm);';
-          grpHeader.textContent = '▸ ' + groupName + ' (' + courses.length + '门)';
-          courseList.appendChild(grpHeader);
-        }
+        // Group sub-header with drop zone indicator
+        var grpHeader = document.createElement('div');
+        grpHeader.style.cssText = 'font-weight:var(--font-weight-medium);font-size:var(--font-size-sm);color:var(--color-text-secondary);padding:var(--space-sm) 0;margin-top:var(--space-sm);';
+        grpHeader.textContent = '▸ ' + (groupName || '默认') + ' (' + courses.length + '门)';
+        courseList.appendChild(grpHeader);
+
+        // Create drop zone wrapper for this group
+        var dropZone = document.createElement('div');
+        dropZone.className = 'drag-zone';
+        dropZone.dataset.group = groupName;
+        dropZone.dataset.category = catName;
+        dropZone.style.cssText = 'min-height:8px;';
 
         // Course rows
         for (var c = 0; c < courses.length; c++) {
           var course = courses[c];
           var row = document.createElement('div');
-          row.style.cssText = 'display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-md) 0;border-bottom:1px solid var(--color-border);';
+          row.className = 'drag-row';
+          row.draggable = true;
+          row.dataset.id = course.id;
+          row.dataset.order = c;
+          row.dataset.group = groupName;
+          row.dataset.category = catName;
+          row.style.cssText = 'display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-md) var(--space-sm);border-bottom:1px solid var(--color-border);cursor:grab;transition:background var(--transition-fast);user-select:none;-webkit-user-select:none;';
+          row.title = '拖拽排序';
+
+          // Drag handle
+          var handle = document.createElement('div');
+          handle.style.cssText = 'flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);cursor:grab;';
+          handle.innerHTML = '<svg width="16" height="16"><line x1="4" y1="6" x2="20" y2="6" stroke="currentColor" stroke-width="2"/><line x1="4" y1="10" x2="20" y2="10" stroke="currentColor" stroke-width="2"/><line x1="4" y1="14" x2="20" y2="14" stroke="currentColor" stroke-width="2"/></svg>';
+          row.appendChild(handle);
 
           var infoDiv = document.createElement('div');
           infoDiv.style.cssText = 'flex:1;min-width:0;display:flex;align-items:center;gap:var(--space-sm);';
@@ -659,6 +680,7 @@
           editBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
           editBtn.innerHTML = '<svg width="14" height="14"><use href="#icon-edit"/></svg>';
           editBtn.title = '编辑';
+          editBtn.addEventListener('click', function(e) { e.stopPropagation(); });
           (function (crs) {
             editBtn.addEventListener('click', function () { openEditModal(crs); });
           })(course);
@@ -669,15 +691,84 @@
           deleteBtn.style.cssText = 'padding:var(--space-xs) var(--space-sm);min-height:32px;font-size:var(--font-size-xs);flex-shrink:0;';
           deleteBtn.innerHTML = '<svg width="14" height="14"><use href="#icon-trash"/></svg>';
           deleteBtn.title = '删除';
+          deleteBtn.addEventListener('click', function(e) { e.stopPropagation(); });
           (function (crs) {
             deleteBtn.addEventListener('click', function () { deleteCourse(crs); });
           })(course);
           row.appendChild(deleteBtn);
 
-          courseList.appendChild(row);
+          // Drag events
+          row.addEventListener('dragstart', function(e) {
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.dataset.id);
+            this.style.opacity = '0.5';
+            this.classList.add('dragging');
+          });
+          row.addEventListener('dragend', function(e) {
+            this.style.opacity = '1';
+            this.classList.remove('dragging');
+            // Remove all drag-over highlights
+            var allRows = courseList.querySelectorAll('.drag-row');
+            for (var r = 0; r < allRows.length; r++) {
+              allRows[r].style.borderTop = '';
+            }
+          });
+          row.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            this.style.borderTop = '2px solid var(--color-primary)';
+          });
+          row.addEventListener('dragleave', function(e) {
+            this.style.borderTop = '';
+          });
+          row.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderTop = '';
+            var dragId = e.dataTransfer.getData('text/plain');
+            if (dragId === this.dataset.id) return;
+            // Reorder within same group only
+            var dragRow = courseList.querySelector('.drag-row[data-id="' + dragId + '"]');
+            if (!dragRow) return;
+            if (dragRow.dataset.group !== this.dataset.group || dragRow.dataset.category !== this.dataset.category) {
+              App.toast('只能在同一分组内排序');
+              return;
+            }
+            // Move the dragged row before this row
+            var parent = this.parentElement;
+            parent.insertBefore(dragRow, this);
+            // Save new order
+            saveGroupOrder(parent);
+          });
+
+          dropZone.appendChild(row);
+        }
+
+        courseList.appendChild(dropZone);
+      }
+    }
+  }
+
+  // Save order of courses in a drop zone
+  function saveGroupOrder(dropZone) {
+    var rows = dropZone.querySelectorAll('.drag-row');
+    var orderData = [];
+    for (var i = 0; i < rows.length; i++) {
+      orderData.push({ id: rows[i].dataset.id, order: i });
+    }
+    // Update local data
+    for (var i = 0; i < orderData.length; i++) {
+      for (var j = 0; j < allCourses.length; j++) {
+        if (allCourses[j].id === orderData[i].id) {
+          allCourses[j].order = orderData[i].order;
+          break;
         }
       }
     }
+    // Save to API
+    API.adminReorderCourses(orderData)
+      .then(function() { App.toast('顺序已保存'); })
+      .catch(function(err) { App.toast(err.message || '保存失败'); });
   }
 
   /*

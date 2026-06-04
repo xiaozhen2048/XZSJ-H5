@@ -456,7 +456,7 @@
     // Render groups as expandable section cards
     for (var g = 0; g < groups.length; g++) {
       var group = groups[g];
-      var groupCourses = group.courses || [];
+      var groupCourses = (group.courses || []).slice().sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
       var groupName = group.name;
 
       // Build group section (expandable card)

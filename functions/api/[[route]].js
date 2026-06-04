@@ -175,6 +175,45 @@ export async function onRequest(context) {
       return json({ success: true });
     }
 
+    // POST /api/admin/courses/reorder
+    if (request.method === 'POST' && path === '/admin/courses/reorder') {
+      const { orders } = await parseBody(request);
+      if (!orders || !Array.isArray(orders))
+        return json({ error: '缺少排序数据' }, 400);
+
+      const data = (await env.DATA_KV.get('courses', 'json')) || { categories: [] };
+      // Build lookup map
+      const orderMap = {};
+      for (const item of orders) {
+        orderMap[item.id] = item.order;
+      }
+      // Update orders
+      for (const cat of data.categories) {
+        if (cat.groups) {
+          for (const group of cat.groups) {
+            if (group.courses) {
+              for (const course of group.courses) {
+                if (orderMap[course.id] !== undefined) {
+                  course.order = orderMap[course.id];
+                }
+              }
+              group.courses.sort((a, b) => (a.order || 0) - (b.order || 0));
+            }
+          }
+        }
+        if (cat.courses) {
+          for (const course of cat.courses) {
+            if (orderMap[course.id] !== undefined) {
+              course.order = orderMap[course.id];
+            }
+          }
+          cat.courses.sort((a, b) => (a.order || 0) - (b.order || 0));
+        }
+      }
+      await env.DATA_KV.put('courses', JSON.stringify(data));
+      return json({ success: true });
+    }
+
     // POST /api/admin/courses/delete
     if (request.method === 'POST' && path === '/admin/courses/delete') {
       const { id } = await parseBody(request);
