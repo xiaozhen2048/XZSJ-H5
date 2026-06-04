@@ -492,6 +492,42 @@ ol {
   fill: var(--color-text-muted);
 }
 
+
+/* ---- 6b. Group Card (level 2: 理论母题/强化刷题) ---- */
+.group-card {
+  border-left: 4px solid var(--color-primary) !important;
+  background: var(--color-accent-light);
+}
+
+.group-card .course-header {
+  padding-left: 0;
+}
+
+.group-card .course-header .course-icon {
+  background: var(--color-primary);
+  width: 40px;
+  height: 40px;
+}
+
+.group-card .course-header .course-icon svg {
+  fill: #FFFFFF;
+}
+
+.group-card .course-header .course-title {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Course cards nested inside a group card: indent to show hierarchy */
+.group-card .video-capsules .course-card {
+  margin-left: var(--space-lg);
+  border-left: 3px solid var(--color-border);
+}
+
+.group-card .video-capsules .course-card .course-header .course-icon {
+  width: 36px;
+  height: 36px;
+}
+
 .course-card.expanded .course-header .expand-icon {
   transform: rotate(180deg);
 }
