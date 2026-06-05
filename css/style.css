@@ -605,8 +605,8 @@ ol {
 
 /* Completion check button */
 .check-btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -617,14 +617,35 @@ ol {
   cursor: pointer;
   transition: all var(--transition-fast);
   margin-right: 4px;
+  position: relative;
+}
+/* Subtle hint dot inside the empty circle */
+.check-btn::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  opacity: 0.5;
+  transition: all var(--transition-fast);
 }
 .check-btn:hover {
   border-color: var(--color-success);
-  background: rgba(143, 168, 143, 0.1);
+  transform: scale(1.1);
+}
+.check-btn:hover::after {
+  background: var(--color-success);
+  opacity: 0.7;
+}
+.check-btn:active {
+  transform: scale(0.9);
 }
 .check-btn.checked {
   background: var(--color-success);
   border-color: var(--color-success);
+}
+.check-btn.checked::after {
+  display: none;
 }
 .check-btn.checked svg {
   width: 16px;
