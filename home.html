@@ -176,9 +176,7 @@
     <div class="brand">小镇刷题家</div>
     <div class="tagline">江苏专用 · 数资判系统课程</div>
   </div>
-  <button class="theme-toggle" id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);transition:background var(--transition-fast);" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%4]);updateThemeIcon()">
-    <svg id="themeIcon" width="22" height="22"><use href="#icon-sun"/></svg>
-  </button>
+  
 </div>
 
 <!-- Preview Banner -->
@@ -263,6 +261,12 @@
           <div>
             <div style="font-weight:var(--font-weight-semibold);font-size:var(--font-size-sm);margin-bottom:2px;">真题复盘 <span style="font-size:var(--font-size-xs);color:var(--color-text-muted);">计时做→看视频</span></div>
             <div style="font-size:var(--font-size-xs);color:var(--color-text-secondary);">严格计时模拟考场，做完再复盘讲解</div>
+          </div>
+        <div style="display:flex;gap:var(--space-md);align-items:flex-start;">
+          <div style="background:var(--color-success);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:var(--font-size-sm);font-weight:var(--font-weight-bold);flex-shrink:0;">✓</div>
+          <div>
+            <div style="font-weight:var(--font-weight-semibold);font-size:var(--font-size-sm);margin-bottom:2px;">标记完成 <span style="font-size:var(--font-size-xs);color:var(--color-text-muted);">跟踪进度</span></div>
+            <div style="font-size:var(--font-size-xs);color:var(--color-text-secondary);">每学完一节课，点击课程右侧的圆圈标记已完成</div>
           </div>
         </div>
       </div>

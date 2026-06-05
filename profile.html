@@ -212,10 +212,6 @@
     <div id="feedbackMsg" style="display:none;text-align:center;margin-top:var(--space-sm);font-size:var(--font-size-xs);"></div>
   </div>
 
-  <!-- Theme Section -->
-  <div class="section-title">主题皮肤</div>
-  <div id="themeList" style="display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-xl);"></div>
-
   <!-- Logout Button -->
   <button id="logoutBtn" class="btn btn-danger btn-block">退出登录</button>
 
@@ -242,39 +238,7 @@
   var activationCode = document.getElementById('activationCode');
   var activationDate = document.getElementById('activationDate');
   var previewWarning = document.getElementById('previewWarning');
-  var themeList      = document.getElementById('themeList');
   var logoutBtn      = document.getElementById('logoutBtn');
-
-  // Theme definitions
-  var themes = [
-    {
-      name: 'default',
-      label: '莫兰迪 · 默认',
-      type: 'swatch',
-      swatch: 'linear-gradient(135deg, #B8A9B4 0%, #C5BAB0 100%)'
-    },
-    {
-      name: 'light',
-      label: '白天模式',
-      type: 'icon',
-      icon: 'icon-sun',
-      swatch: '#FFFFFF'
-    },
-    {
-      name: 'dark',
-      label: '夜间模式',
-      type: 'icon',
-      icon: 'icon-moon',
-      swatch: '#1E1B1F'
-    },
-    {
-      name: 'auto',
-      label: '跟随系统',
-      type: 'icon',
-      icon: 'icon-settings',
-      swatch: 'linear-gradient(135deg, #FFFFFF 50%, #1E1B1F 50%)'
-    }
-  ];
 
   // Populate activation info
   function renderActivation() {
@@ -317,78 +281,7 @@
     }
   }
 
-  // Render theme selection rows
-  function renderThemes() {
-    var currentTheme = Theme.current();
-    themeList.innerHTML = '';
-
-    for (var i = 0; i < themes.length; i++) {
-      var theme = themes[i];
-      var isActive = theme.name === currentTheme;
-      var borderColor = isActive ? 'var(--color-primary)' : 'var(--color-border)';
-      var borderWidth = isActive ? '2px' : '1px';
-
-      var row = document.createElement('div');
-      row.style.cssText =
-        'display:flex;align-items:center;gap:var(--space-md);' +
-        'background:var(--color-surface);border-radius:var(--radius-md);' +
-        'padding:var(--space-md) var(--space-lg);' +
-        'box-shadow:var(--shadow-card);cursor:pointer;' +
-        'border:' + borderWidth + ' solid ' + borderColor + ';' +
-        'transition:border-color var(--transition-fast),transform var(--transition-fast);';
-
-      row.addEventListener('click', (function (name) {
-        return function () {
-          Theme.apply(name);
-          renderThemes();
-        };
-      })(theme.name));
-
-      row.addEventListener('mousedown', function () {
-        this.style.transform = 'scale(0.98)';
-      });
-      row.addEventListener('mouseup', function () {
-        this.style.transform = '';
-      });
-      row.addEventListener('mouseleave', function () {
-        this.style.transform = '';
-      });
-
-      // Swatch / icon area
-      var swatchHTML = '';
-      if (theme.type === 'icon') {
-        swatchHTML =
-          '<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;' +
-          'border-radius:var(--radius-sm);flex-shrink:0;border:1px solid var(--color-border);' +
-          'background:' + theme.swatch + ';">' +
-            '<svg width="20" height="20" style="fill:var(--color-text-secondary);">' +
-              '<use href="#' + theme.icon + '"/>' +
-            '</svg>' +
-          '</div>';
-      } else {
-        swatchHTML =
-          '<div style="width:40px;height:40px;border-radius:var(--radius-sm);flex-shrink:0;' +
-          'background:' + theme.swatch + ';border:1px solid var(--color-border);"></div>';
-      }
-
-      // Checkmark for active theme
-      var checkHTML = '';
-      if (isActive) {
-        checkHTML =
-          '<div style="flex-shrink:0;">' +
-            '<svg width="20" height="20" style="fill:var(--color-primary-dark);">' +
-              '<use href="#icon-check"/>' +
-            '</svg>' +
-          '</div>';
-      }
-
-      row.innerHTML = swatchHTML +
-        '<span style="flex:1;font-size:var(--font-size-sm);">' + escapeHTML(theme.label) + '</span>' +
-        checkHTML;
-
-      themeList.appendChild(row);
-    }
-  }
+  // Logout handler
 
   // Feedback
   var feedbackInput = document.getElementById('feedbackInput');
@@ -424,7 +317,6 @@
   });
 
   renderActivation();
-  renderThemes();
 
 })();
 </script>
