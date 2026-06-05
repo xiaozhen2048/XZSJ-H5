@@ -41,9 +41,27 @@ async function checkAdmin(req, env) {
   if (!auth) return false;
   const data = await env.DATA_KV.get('activations', 'json') || {};
   if (data.adminToken !== auth) return false;
-  // Token expiry check (24h)
+  // Token expiry check (24h) — skip if no expiry set (legacy tokens)
   if (data.adminTokenExpiry && Date.now() > data.adminTokenExpiry) return false;
   return true;
+}
+
+// Helper: check if request has a valid activation token
+async function isActivated(request, env) {
+  try {
+    const token = (request.headers.get('Authorization') || '').replace('Bearer ', '');
+    if (!token) return false;
+    const data = (await env.DATA_KV.get('activations', 'json')) || {};
+    const codes = data.codes || {};
+    for (var key in codes) {
+      if (codes[key] && codes[key].token === token && !codes[key].banned) {
+        return true;
+      }
+    }
+    return false;
+  } catch(e) {
+    return false;
+  }
 }
 
 // ===== MAIN HANDLER =====
@@ -81,25 +99,6 @@ export async function onRequest(context) {
         return json(stripped);
       }
       return json(data);
-    }
-
-    // Helper: check if request has a valid activation token
-    async function isActivated(request, env) {
-      try {
-        const token = (request.headers.get('Authorization') || '').replace('Bearer ', '');
-        if (!token) return false;
-        const data = (await env.DATA_KV.get('activations', 'json')) || {};
-        const codes = data.codes || {};
-        // Token is stored on each code record: codes[codeKey].token
-        for (var key in codes) {
-          if (codes[key] && codes[key].token === token && !codes[key].banned) {
-            return true;
-          }
-        }
-        return false;
-      } catch(e) {
-        return false;
-      }
     }
 
     // POST /api/activate — validate activation code
