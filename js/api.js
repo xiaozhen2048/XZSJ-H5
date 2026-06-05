@@ -22,17 +22,12 @@ const API = {
     return this.request('POST', '/api/activate', { code });
   },
 
-  // Get courses: static file for preview (no passwords), API for activated (with passwords)
+  // Get courses from static file (fast), fallback to API
   async getCourses() {
-    // Activated users: use API to get full data with passwords
-    if (Auth.isActivated()) {
-      return this.request('GET', '/api/courses');
-    }
-    // Preview / public: use static file (passwords already stripped)
     try {
       const res = await fetch('/data/courses.json');
       if (res.ok) return res.json();
-    } catch(e) { /* fallback to API which will strip passwords */ }
+    } catch(e) { /* fallback */ }
     return this.request('GET', '/api/courses');
   },
 
