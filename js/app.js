@@ -95,8 +95,8 @@ const App = {
     //   downloads.html, method.html, profile.html, admin
 
     if (page && page !== 'index.html' && page !== '') {
-      // Admin: has own auth
-      if (page === 'admin.html' || page === 'admin') return;
+      // Admin panel (has own auth, hidden path)
+      if (window.location.pathname.indexOf('/_houtai') !== -1) return;
 
       // Fully restricted: require activation (preview not enough)
       var restrictedPages = ['downloads.html', 'downloads', 'method.html', 'method', 'profile.html', 'profile'];
