@@ -96,7 +96,7 @@ const App = {
 
     if (page && page !== 'index.html' && page !== '') {
       // Admin panel (has own auth, hidden path)
-      if (window.location.pathname.indexOf('/_houtai') !== -1) return;
+      if (window.location.pathname.indexOf('/liuying') !== -1) return;
 
       // Fully restricted: require activation (preview not enough)
       var restrictedPages = ['downloads.html', 'downloads', 'method.html', 'method', 'profile.html', 'profile'];
