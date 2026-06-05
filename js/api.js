@@ -22,13 +22,21 @@ const API = {
     return this.request('POST', '/api/activate', { code });
   },
 
-  // Get courses from static file (fast), fallback to API
+  // Get courses: API first (KV, always fresh), fallback to static file
   async getCourses() {
+    // Try API first (has latest admin changes)
+    try {
+      const res = await fetch(window.APP_CONFIG.API_BASE + '/api/courses', {
+        headers: Auth.getToken() ? { 'Authorization': 'Bearer ' + Auth.getToken() } : {}
+      });
+      if (res.ok) return res.json();
+    } catch(e) { /* fallback to static */ }
+    // Fallback to static file
     try {
       const res = await fetch('/data/courses.json');
       if (res.ok) return res.json();
-    } catch(e) { /* fallback */ }
-    return this.request('GET', '/api/courses');
+    } catch(e) { /* give up */ }
+    return { categories: [] };
   },
 
   // Admin: login with password

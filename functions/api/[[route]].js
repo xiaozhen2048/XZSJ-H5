@@ -369,6 +369,14 @@ export async function onRequest(context) {
       return json({ success: true, code, banned: data.codes[code].banned });
     }
 
+    // POST /api/admin/sync-courses — seed KV from request body
+    if (request.method === 'POST' && path === '/admin/sync-courses') {
+      const body = await parseBody(request);
+      if (!body || !body.categories) return json({ error: '缺少课程数据' }, 400);
+      await env.DATA_KV.put('courses', JSON.stringify(body));
+      return json({ success: true, message: '课程数据已同步到服务器' });
+    }
+
     // POST /api/admin/codes/revoke-all — delete all activation codes
     if (request.method === 'POST' && path === '/admin/codes/revoke-all') {
       const { confirm } = await parseBody(request);
