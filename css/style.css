@@ -603,6 +603,66 @@ ol {
   animation: expandIn 0.25s ease;
 }
 
+/* Completion check button */
+.check-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-right: 4px;
+}
+.check-btn:hover {
+  border-color: var(--color-success);
+  background: rgba(143, 168, 143, 0.1);
+}
+.check-btn.checked {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+.check-btn.checked svg {
+  width: 16px;
+  height: 16px;
+  color: #FFFFFF;
+}
+.check-btn:not(.checked) svg {
+  display: none;
+}
+
+/* Done state for course cards */
+.course-card.done .course-title {
+  opacity: 0.7;
+}
+.course-card.done .course-icon {
+  background: var(--color-success) !important;
+}
+
+/* Category progress bar */
+.progress-bar-wrap {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--color-success);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
 /* Press feedback on course headers */
 .course-header:active {
   background: rgba(0, 0, 0, 0.03);

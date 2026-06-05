@@ -52,7 +52,7 @@
     <use href="#icon-play"/>
   </svg>
   <div class="title" style="flex:1;">免费试学</div>
-  <button id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%3]);updateThemeIcon()">
+  <button id="themeToggle" title="切换皮肤" style="background:none;border:none;cursor:pointer;width:var(--touch-target);height:var(--touch-target);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);flex-shrink:0;" onclick="var t=Theme.current();var i=Theme.THEMES.indexOf(t);Theme.apply(Theme.THEMES[(i+1)%4]);updateThemeIcon()">
     <svg id="themeIcon" width="22" height="22"><use href="#icon-sun"/></svg>
   </button>
 </div>
@@ -120,7 +120,7 @@ window.updateThemeIcon = function() {
   var icon = document.getElementById('themeIcon');
   if (!icon) return;
   var use = icon.querySelector('use');
-  var t = Theme.current();
+  var t = Theme.effective();
   if (t === 'dark') use.setAttribute('href', '#icon-moon');
   else if (t === 'light') use.setAttribute('href', '#icon-sun');
   else use.setAttribute('href', '#icon-sun');

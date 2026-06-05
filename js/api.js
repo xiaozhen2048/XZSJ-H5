@@ -7,8 +7,8 @@ const API = {
     };
     if (body) opts.body = JSON.stringify(body);
 
-    // Check activation token (localStorage) and admin token (sessionStorage)
-    const token = Auth.getToken() || sessionStorage.getItem('xzst_admin_token');
+    // Admin token (sessionStorage) takes priority over activation token (localStorage)
+    const token = sessionStorage.getItem('xzst_admin_token') || Auth.getToken();
     if (token) opts.headers['Authorization'] = 'Bearer ' + token;
 
     const res = await fetch(window.APP_CONFIG.API_BASE + path, opts);

@@ -89,7 +89,14 @@ export async function onRequest(context) {
         const token = (request.headers.get('Authorization') || '').replace('Bearer ', '');
         if (!token) return false;
         const data = (await env.DATA_KV.get('activations', 'json')) || {};
-        return data.activationTokens && data.activationTokens[token];
+        const codes = data.codes || {};
+        // Token is stored on each code record: codes[codeKey].token
+        for (var key in codes) {
+          if (codes[key] && codes[key].token === token && !codes[key].banned) {
+            return true;
+          }
+        }
+        return false;
       } catch(e) {
         return false;
       }
