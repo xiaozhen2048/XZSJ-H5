@@ -224,7 +224,8 @@
       ? '<div class="course-meta">' + tagHTML + (tagHTML && videoCount ? ' ' : '') + (videoCount ? videoCount + '个视频' : '') + '</div>'
       : '';
 
-    var isDone = (typeof Progress !== 'undefined') ? Progress.isDone(course.id) : false;
+    var showCheck = Auth.isActivated() && typeof Progress !== 'undefined';
+    var isDone = showCheck ? Progress.isDone(course.id) : false;
     return '<div class="course-card' + (isDone ? ' done' : '') + '">' +
       '<div class="course-header" onclick="event.stopPropagation();this.parentElement.classList.toggle(\'expanded\')">' +
         '<div class="course-icon"><svg><use href="#icon-play"/></svg></div>' +
@@ -232,7 +233,7 @@
           '<div class="course-title">' + title + '</div>' +
           metaHTML +
         '</div>' +
-        (typeof Progress !== 'undefined' ?
+        (showCheck ?
           '<button class="check-btn' + (isDone ? ' checked' : '') + '" onclick="event.stopPropagation();var c=this.closest(\'.course-card\');var done=Progress.toggle(\'' + attr(course.id) + '\');c.classList.toggle(\'done\',done);this.classList.toggle(\'checked\',done)" title="标记完成">' +
             (isDone ? '<svg><use href="#icon-check"/></svg>' : '') + '</button>' : '') +
         '<div class="expand-icon"><svg><use href="#icon-chevron-down"/></svg></div>' +
