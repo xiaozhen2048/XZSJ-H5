@@ -7,7 +7,8 @@ const API = {
     };
     if (body) opts.body = JSON.stringify(body);
 
-    const token = Auth.getToken();
+    // Check activation token (localStorage) and admin token (sessionStorage)
+    const token = Auth.getToken() || sessionStorage.getItem('xzst_admin_token');
     if (token) opts.headers['Authorization'] = 'Bearer ' + token;
 
     const res = await fetch(window.APP_CONFIG.API_BASE + path, opts);
@@ -21,12 +22,17 @@ const API = {
     return this.request('POST', '/api/activate', { code });
   },
 
-  // Public: load from static file first (fast CDN), fallback to API
+  // Get courses: static file for preview (no passwords), API for activated (with passwords)
   async getCourses() {
+    // Activated users: use API to get full data with passwords
+    if (Auth.isActivated()) {
+      return this.request('GET', '/api/courses');
+    }
+    // Preview / public: use static file (passwords already stripped)
     try {
       const res = await fetch('/data/courses.json');
       if (res.ok) return res.json();
-    } catch(e) { /* fallback */ }
+    } catch(e) { /* fallback to API which will strip passwords */ }
     return this.request('GET', '/api/courses');
   },
 

@@ -38,8 +38,12 @@ function json(data, status = 200) {
 // Admin auth check
 async function checkAdmin(req, env) {
   const auth = (req.headers.get('Authorization') || '').replace('Bearer ', '');
+  if (!auth) return false;
   const data = await env.DATA_KV.get('activations', 'json') || {};
-  return auth && data.adminToken === auth;
+  if (data.adminToken !== auth) return false;
+  // Token expiry check (24h)
+  if (data.adminTokenExpiry && Date.now() > data.adminTokenExpiry) return false;
+  return true;
 }
 
 // ===== MAIN HANDLER =====
@@ -63,10 +67,32 @@ export async function onRequest(context) {
 
     // ===== PUBLIC ROUTES =====
 
-    // GET /api/courses — return course data
+    // GET /api/courses — returns course data
+    // Without auth: strips video passwords. With auth: includes passwords.
     if (request.method === 'GET' && path === '/courses') {
       const data = await env.DATA_KV.get('courses', 'json') || { categories: [] };
+      const isAuth = await isActivated(request, env) || await checkAdmin(request, env);
+      if (!isAuth) {
+        // Strip passwords for unauthenticated requests
+        const stripped = JSON.parse(JSON.stringify(data), function(key, value) {
+          if (key === 'password' || key === 'pwd') return '';
+          return value;
+        });
+        return json(stripped);
+      }
       return json(data);
+    }
+
+    // Helper: check if request has a valid activation token
+    async function isActivated(request, env) {
+      try {
+        const token = (request.headers.get('Authorization') || '').replace('Bearer ', '');
+        if (!token) return false;
+        const data = (await env.DATA_KV.get('activations', 'json')) || {};
+        return data.activationTokens && data.activationTokens[token];
+      } catch(e) {
+        return false;
+      }
     }
 
     // POST /api/activate — validate activation code
@@ -133,20 +159,30 @@ export async function onRequest(context) {
     // POST /api/admin/login
     if (request.method === 'POST' && path === '/admin/login') {
       const body = await parseBody(request);
-      const data = (await env.DATA_KV.get('activations', 'json')) || {};
 
-      // Allow overriding via env var or query param for password recovery
-      let adminPwd = env.ADMIN_PASSWORD || data.adminPassword || 'admin123';
-      if (body._reset === 'true') {
-        data.adminPassword = body.newPassword || 'admin123';
-        await env.DATA_KV.put('activations', JSON.stringify(data));
-        return json({ success: true, message: '密码已重置为 ' + data.adminPassword });
+      // Rate limiting: max 5 attempts per minute per IP
+      const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+      const rateKey = 'rate:admin:' + ip;
+      const attempts = parseInt((await env.DATA_KV.get(rateKey)) || '0');
+      if (attempts >= 5) {
+        return json({ error: '尝试次数过多，请1分钟后再试' }, 429);
+      }
+      await env.DATA_KV.put(rateKey, String(attempts + 1), { expirationTtl: 60 });
+
+      const data = (await env.DATA_KV.get('activations', 'json')) || {};
+      // Password priority: env var > KV store > default
+      const adminPwd = env.ADMIN_PASSWORD || data.adminPassword || 'admin123';
+
+      if (body.password !== adminPwd) {
+        return json({ error: '密码错误' }, 401);
       }
 
-      if (body.password !== adminPwd)
-        return json({ error: '密码错误' }, 401);
+      // Clear rate limit on successful login
+      await env.DATA_KV.delete(rateKey);
 
       data.adminToken = randomHex(32);
+      // Token expires in 24 hours
+      data.adminTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
       await env.DATA_KV.put('activations', JSON.stringify(data));
       return json({ token: data.adminToken });
     }
@@ -308,6 +344,7 @@ export async function onRequest(context) {
     return json({ error: 'Not Found' }, 404);
 
   } catch (err) {
-    return json({ error: '服务器错误: ' + err.message }, 500);
+    console.error('API Error:', err.message);
+    return json({ error: '服务器错误，请稍后重试' }, 500);
   }
 }

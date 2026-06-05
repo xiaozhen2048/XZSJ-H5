@@ -453,14 +453,8 @@
         if (!token) {
           throw new Error('登录失败，未获取到令牌');
         }
-        // Save token for gate check
+        // Save token for gate check (sessionStorage only)
         sessionStorage.setItem('xzst_admin_token', token);
-        // Also save via Auth so API.request() can pick it up
-        Auth.saveActivation({
-          code: 'admin',
-          token: token,
-          activatedAt: new Date().toISOString()
-        });
         adminToken = token;
         App.toast('登录成功');
         showAdminPanel();
@@ -490,8 +484,6 @@
 
   logoutBtn.addEventListener('click', function () {
     sessionStorage.removeItem('xzst_admin_token');
-    // Clear auth data so API.request() no longer sends admin token
-    localStorage.removeItem(window.APP_CONFIG.STORAGE_KEYS.ACTIVATION);
     window.location.reload();
   });
 
