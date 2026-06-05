@@ -91,7 +91,19 @@ export async function onRequest(context) {
     // GET /api/courses — returns course data
     // Without auth: strips video passwords. With auth: includes passwords.
     if (request.method === 'GET' && path === '/courses') {
-      const data = await env.DATA_KV.get('courses', 'json') || { categories: [] };
+      let data = await env.DATA_KV.get('courses', 'json');
+      // Auto-seed from static file if KV is empty
+      if (!data || !data.categories || data.categories.length === 0) {
+        try {
+          const url = new URL(request.url);
+          const seedRes = await fetch(url.origin + '/data/courses.json');
+          if (seedRes.ok) {
+            data = await seedRes.json();
+            await env.DATA_KV.put('courses', JSON.stringify(data));
+          }
+        } catch(e) {}
+      }
+      data = data || { categories: [] };
       const isAuth = await isActivated(request, env) || await checkAdmin(request, env);
       if (!isAuth) {
         // Strip passwords for unauthenticated requests
@@ -226,8 +238,19 @@ export async function onRequest(context) {
 
     // GET /api/admin/courses
     if (request.method === 'GET' && path === '/admin/courses') {
-      const data = await env.DATA_KV.get('courses', 'json') || { categories: [] };
-      return json(data);
+      let data = await env.DATA_KV.get('courses', 'json');
+      // Auto-seed from static file if KV is empty
+      if (!data || !data.categories || data.categories.length === 0) {
+        try {
+          const url = new URL(request.url);
+          const seedRes = await fetch(url.origin + '/data/courses.json');
+          if (seedRes.ok) {
+            data = await seedRes.json();
+            await env.DATA_KV.put('courses', JSON.stringify(data));
+          }
+        } catch(e) {}
+      }
+      return json(data || { categories: [] });
     }
 
     // POST /api/admin/courses/save
@@ -370,14 +393,6 @@ export async function onRequest(context) {
       data.codes[code].banned = !data.codes[code].banned;
       await env.DATA_KV.put('activations', JSON.stringify(data));
       return json({ success: true, code, banned: data.codes[code].banned });
-    }
-
-    // POST /api/admin/sync-courses — seed KV from request body
-    if (request.method === 'POST' && path === '/admin/sync-courses') {
-      const body = await parseBody(request);
-      if (!body || !body.categories) return json({ error: '缺少课程数据' }, 400);
-      await env.DATA_KV.put('courses', JSON.stringify(body));
-      return json({ success: true, message: '课程数据已同步到服务器' });
     }
 
     // POST /api/admin/codes/revoke-all — delete all activation codes

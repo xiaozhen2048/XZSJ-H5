@@ -221,10 +221,7 @@
          =================================================================== -->
     <div class="admin-section">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-lg);">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0;">
-          <h2 style="margin-bottom:0;">课程管理</h2>
-          <button class="btn btn-outline btn-sm" id="syncCoursesBtn" title="将当前课程数据同步到前端">同步到前端</button>
-        </div>
+        <h2 style="margin-bottom:0;">课程管理</h2>
         <button class="btn btn-primary btn-sm" id="addCourseBtn">
           <svg width="16" height="16"><use href="#icon-plus"/></svg>
           添加课程
@@ -407,7 +404,6 @@
   var adminToken = sessionStorage.getItem('xzst_admin_token') || '';
   var editingCourseId = null;
   var allCourses = [];
-  var courseDataRaw = null; // Original API response for sync
   var allCodes = [];
 
   // -----------------------------------------------------------------------
@@ -787,7 +783,6 @@
 
     API.adminGetCourses()
       .then(function (data) {
-        courseDataRaw = data; // Save raw data for sync
         var courses = [];
         // Handle different response shapes
         if (Array.isArray(data)) {
@@ -1332,21 +1327,6 @@
   }
 
   feedbackRefresh.addEventListener('click', loadFeedback);
-
-  // Sync courses to KV for frontend
-  document.getElementById('syncCoursesBtn').addEventListener('click', function () {
-    if (!confirm('将当前后台课程数据同步到前端？')) return;
-    this.textContent = '同步中...';
-    this.disabled = true;
-    var btn = this;
-    API.request('POST', '/api/admin/sync-courses', courseDataRaw || { categories: [] })
-      .then(function (r) { App.toast(r.message || '同步成功'); })
-      .catch(function (e) { App.toast(e.message || '同步失败'); })
-      .finally(function () {
-        btn.textContent = '同步到前端';
-        btn.disabled = false;
-      });
-  });
 
   // Load feedback when admin panel shown
   var origShowAdmin = showAdminPanel;
