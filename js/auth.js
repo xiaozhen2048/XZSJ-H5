@@ -60,6 +60,7 @@ const Auth = {
   // Logout: clear stored data and redirect to lock screen
   logout() {
     localStorage.removeItem(window.APP_CONFIG.STORAGE_KEYS.ACTIVATION);
+    localStorage.removeItem('xzst_progress');
     sessionStorage.removeItem('xzst_preview');
     window.location.href = 'index.html';
   },

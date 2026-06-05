@@ -460,7 +460,7 @@
       } else {
         allCourses = cat.courses || [];
       }
-      var progress = (typeof Progress !== 'undefined') ? Progress.getCategoryProgress(allCourses) : { done: 0, total: 0, percent: 0 };
+      var progress = (Auth.isActivated() && typeof Progress !== 'undefined') ? Progress.getCategoryProgress(allCourses) : { done: 0, total: 0, percent: 0 };
 
       // Build description text
       var descText = '';
