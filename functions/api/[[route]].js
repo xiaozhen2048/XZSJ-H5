@@ -160,6 +160,29 @@ export async function onRequest(context) {
       return json({ success: true });
     }
 
+    // ===== PROGRESS ROUTES (requires activation token) =====
+
+    // GET /api/progress — get current user's progress
+    if (request.method === 'GET' && path === '/progress') {
+      const active = await isActivated(request, env);
+      if (!active) return json({ error: '未授权' }, 401);
+      const token = (request.headers.get('Authorization') || '').replace('Bearer ', '');
+      const data = (await env.DATA_KV.get('progress', 'json')) || {};
+      return json(data[token] || {});
+    }
+
+    // POST /api/progress — save current user's progress
+    if (request.method === 'POST' && path === '/progress') {
+      const active = await isActivated(request, env);
+      if (!active) return json({ error: '未授权' }, 401);
+      const token = (request.headers.get('Authorization') || '').replace('Bearer ', '');
+      const body = await parseBody(request);
+      const data = (await env.DATA_KV.get('progress', 'json')) || {};
+      data[token] = body.courses || {};
+      await env.DATA_KV.put('progress', JSON.stringify(data));
+      return json({ success: true });
+    }
+
     // ===== ADMIN ROUTES =====
 
     // POST /api/admin/login
@@ -344,6 +367,17 @@ export async function onRequest(context) {
       data.codes[code].banned = !data.codes[code].banned;
       await env.DATA_KV.put('activations', JSON.stringify(data));
       return json({ success: true, code, banned: data.codes[code].banned });
+    }
+
+    // POST /api/admin/codes/revoke-all — delete all activation codes
+    if (request.method === 'POST' && path === '/admin/codes/revoke-all') {
+      const { confirm } = await parseBody(request);
+      if (confirm !== 'yes') return json({ error: '请输入确认指令' }, 400);
+      const data = (await env.DATA_KV.get('activations', 'json')) || { codes: {} };
+      const count = Object.keys(data.codes).length;
+      data.codes = {};
+      await env.DATA_KV.put('activations', JSON.stringify(data));
+      return json({ success: true, message: '已删除 ' + count + ' 个激活码' });
     }
 
     // 404

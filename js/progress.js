@@ -1,21 +1,100 @@
-// js/progress.js — Per-user learning progress (localStorage, keyed by activation code)
+// js/progress.js — Per-user progress, server-synced with localStorage cache
 const Progress = {
-  // Get storage key for current user (empty if not activated)
-  _getKey() {
-    var code = Auth.getCode();
-    if (!code) return '';
-    return 'xzst_progress_' + code;
-  },
+  _cache: null,
+  _loading: false,
+  _dirty: false,
 
-  // Get all completed course IDs as an object { courseId: timestamp }
-  getAll() {
-    var key = this._getKey();
-    if (!key) return {};
+  // Fetch progress from server
+  async _fetch() {
+    if (!Auth.isActivated()) return {};
     try {
-      return JSON.parse(localStorage.getItem(key)) || {};
+      const res = await fetch(window.APP_CONFIG.API_BASE + '/api/progress', {
+        headers: { 'Authorization': 'Bearer ' + Auth.getToken() }
+      });
+      if (!res.ok) return {};
+      const data = await res.json();
+      return data || {};
     } catch(e) {
       return {};
     }
+  },
+
+  // Save progress to server
+  async _save(data) {
+    if (!Auth.isActivated()) return;
+    try {
+      await fetch(window.APP_CONFIG.API_BASE + '/api/progress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Auth.getToken()
+        },
+        body: JSON.stringify({ courses: data })
+      });
+    } catch(e) {}
+  },
+
+  // Get local cache key
+  _cacheKey() {
+    var code = Auth.getCode();
+    return code ? 'xzst_progress_' + code : '';
+  },
+
+  // Load from localStorage cache
+  _loadCache() {
+    if (this._cache) return this._cache;
+    var key = this._cacheKey();
+    if (!key) { this._cache = {}; return this._cache; }
+    try {
+      this._cache = JSON.parse(localStorage.getItem(key)) || {};
+    } catch(e) {
+      this._cache = {};
+    }
+    return this._cache;
+  },
+
+  // Save to localStorage cache + queue server sync
+  _saveCache(data) {
+    this._cache = data;
+    this._dirty = true;
+    var key = this._cacheKey();
+    if (key) localStorage.setItem(key, JSON.stringify(data));
+    // Debounced server sync
+    clearTimeout(this._syncTimer);
+    var self = this;
+    this._syncTimer = setTimeout(function() {
+      self._save(data);
+      self._dirty = false;
+    }, 500);
+  },
+
+  // Init: load from cache, sync from server in background
+  init() {
+    var self = this;
+    this._loadCache();
+    if (Auth.isActivated()) {
+      this._fetch().then(function(serverData) {
+        // Merge server data with local (server wins on conflict)
+        var local = self._loadCache();
+        var merged = {};
+        var localKeys = Object.keys(local);
+        var serverKeys = Object.keys(serverData);
+        // Server data takes priority, but keep local-only entries
+        for (var i = 0; i < localKeys.length; i++) {
+          merged[localKeys[i]] = local[localKeys[i]];
+        }
+        for (var i = 0; i < serverKeys.length; i++) {
+          merged[serverKeys[i]] = serverData[serverKeys[i]];
+        }
+        self._saveCache(merged);
+        self._save(merged); // push merged to server
+      }).catch(function() {});
+    }
+  },
+
+  // Get all completed course IDs
+  getAll() {
+    return this._loadCache();
   },
 
   // Check if a course is completed
@@ -24,21 +103,20 @@ const Progress = {
     return !!this.getAll()[courseId];
   },
 
-  // Toggle completion for a course
+  // Toggle completion
   toggle(courseId) {
-    var key = this._getKey();
-    if (!key || !courseId) return false;
+    if (!courseId) return false;
     var data = this.getAll();
     if (data[courseId]) {
       delete data[courseId];
     } else {
       data[courseId] = Date.now();
     }
-    localStorage.setItem(key, JSON.stringify(data));
+    this._saveCache(data);
     return !!data[courseId];
   },
 
-  // Get progress for a specific category
+  // Get category progress
   getCategoryProgress(courses) {
     if (!courses || courses.length === 0) return { done: 0, total: 0, percent: 0 };
     var all = this.getAll();
@@ -50,32 +128,15 @@ const Progress = {
     return { done: done, total: courses.length, percent: Math.round(done / courses.length * 100) };
   },
 
-  // Get overall progress across all categories
-  getOverallProgress(categories) {
-    var all = this.getAll();
-    var done = 0, total = 0;
-    for (var i = 0; i < categories.length; i++) {
-      var cat = categories[i];
-      var courses = [];
-      if (cat.groups) {
-        for (var g = 0; g < cat.groups.length; g++) {
-          courses = courses.concat(cat.groups[g].courses || []);
-        }
-      } else {
-        courses = cat.courses || [];
-      }
-      for (var c = 0; c < courses.length; c++) {
-        total++;
-        var id = courses[c].id || courses[c]._id;
-        if (id && all[id]) done++;
-      }
-    }
-    return { done: done, total: total, percent: total > 0 ? Math.round(done / total * 100) : 0 };
-  },
-
   // Clear progress for current user
   clear() {
-    var key = this._getKey();
+    var key = this._cacheKey();
     if (key) localStorage.removeItem(key);
+    this._cache = {};
+    this._dirty = false;
+    clearTimeout(this._syncTimer);
   }
 };
+
+// Auto-init when script loads
+Progress.init();
