@@ -279,6 +279,7 @@
 
 <script src="js/config.js?v=1780587475"></script>
 <script src="js/theme.js?v=1780587475"></script>
+<script src="js/progress.js?v=1780587475"></script>
 <script src="js/api.js?v=1780587475"></script>
 <script src="js/auth.js?v=1780587475"></script>
 <script src="js/app.js?v=1780587475"></script>
@@ -446,12 +447,32 @@
       var color      = cat.color || getPaletteColor(i);
       var iconName   = getCategoryIcon(title);
 
+      // Collect all courses for progress
+      var allCourses = [];
+      if (cat.groups) {
+        for (var gi = 0; gi < cat.groups.length; gi++) {
+          allCourses = allCourses.concat(cat.groups[gi].courses || []);
+        }
+      } else {
+        allCourses = cat.courses || [];
+      }
+      var progress = Progress.getCategoryProgress(allCourses);
+
       // Build description text
       var descText = '';
       if (desc) {
         descText = desc;
       } else if (count > 0) {
         descText = count + ' 个课程';
+      }
+
+      var progressHTML = '';
+      if (count > 0 && progress.done > 0) {
+        progressHTML =
+          '<div class="progress-bar-wrap">' +
+            '<div class="progress-bar-fill" style="width:' + progress.percent + '%"></div>' +
+          '</div>' +
+          '<div class="progress-text">' + progress.done + '/' + progress.total + '</div>';
       }
 
       var card = document.createElement('a');
@@ -469,6 +490,7 @@
         '<div class="card-body">' +
           '<div class="card-title">' + escapeHTML(title) + '</div>' +
           (descText ? '<div class="card-desc">' + escapeHTML(descText) + '</div>' : '') +
+          progressHTML +
         '</div>' +
         '<div class="card-arrow">' +
           '<svg><use href="#icon-chevron-right"/></svg>' +
